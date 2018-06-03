@@ -53,5 +53,10 @@ public class HlHylPriceServiceImpl implements HlHylPriceService {
 	public void deleteBatch(Integer[] ids){
 		hlHylPriceDao.deleteBatch(ids);
 	}
+
+	@Override
+	public String queryMaxPrice() {
+		return hlHylPriceDao.queryMaxPrice();
+	}
 	
 }

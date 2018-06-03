@@ -60,7 +60,7 @@ var vm = new Vue({
 		},
 		add: function(){
 			vm.showList = false;
-			vm.title = "新增";
+			vm.title = "购买";
 			vm.hlPurchase = {};
 		},
 		update: function (event) {

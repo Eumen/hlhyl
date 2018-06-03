@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.suke.czx.modules.hladmin.dao.HlPurchaseDao">
+<mapper namespace="com.suke.czx.modules.hladmin.dao.HlRewardDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.suke.czx.modules.hladmin.entity.HlPurchaseEntity" id="hlPurchaseMap">
+    <resultMap type="com.suke.czx.modules.hladmin.entity.HlRewardEntity" id="hlRewardMap">
         <result property="id" column="id"/>
         <result property="userName" column="user_name"/>
         <result property="name" column="name"/>
         <result property="amount" column="amount"/>
-        <result property="status" column="status"/>
-        <result property="applyDate" column="apply_date"/>
-        <result property="purchaseDate" column="purchase_date"/>
+        <result property="awardDate" column="award_date"/>
+        <result property="awardType" column="award_type"/>
         <result property="comment" column="comment"/>
     </resultMap>
 
-	<select id="queryObject" resultType="com.suke.czx.modules.hladmin.entity.HlPurchaseEntity">
-		select * from hl_purchase where id = #{value}
+	<select id="queryObject" resultType="com.suke.czx.modules.hladmin.entity.HlRewardEntity">
+		select * from hl_reward where id = #{value}
 	</select>
 
-	<select id="queryList" resultType="com.suke.czx.modules.hladmin.entity.HlPurchaseEntity">
-		select * from hl_purchase
+	<select id="queryList" resultType="com.suke.czx.modules.hladmin.entity.HlRewardEntity">
+		select * from hl_reward
 		<where>
-			<if test="userName != null">
+        	<if test="userName != null">
 				and `user_name` = #{userName} 
 			</if>
-		</where>
+        </where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
@@ -40,54 +39,49 @@
 	</select>
 	
  	<select id="queryTotal" resultType="int">
-		select count(*) from hl_purchase 
+		select count(*) from hl_reward 
 	</select>
 	 
-	<insert id="save" parameterType="com.suke.czx.modules.hladmin.entity.HlPurchaseEntity">
-		insert into hl_purchase
+	<insert id="save" parameterType="com.suke.czx.modules.hladmin.entity.HlRewardEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into hl_reward
 		(
-			`id`, 
 			`user_name`, 
 			`name`, 
 			`amount`, 
-			`status`, 
-			`apply_date`, 
-			`purchase_date`, 
+			`award_date`, 
+			`award_type`, 
 			`comment`
 		)
 		values
 		(
-			#{id}, 
 			#{userName}, 
 			#{name}, 
 			#{amount}, 
-			#{status}, 
-			#{applyDate}, 
-			#{purchaseDate}, 
+			#{awardDate}, 
+			#{awardType}, 
 			#{comment}
 		)
 	</insert>
 	 
-	<update id="update" parameterType="com.suke.czx.modules.hladmin.entity.HlPurchaseEntity">
-		update hl_purchase 
+	<update id="update" parameterType="com.suke.czx.modules.hladmin.entity.HlRewardEntity">
+		update hl_reward 
 		<set>
 			<if test="userName != null">`user_name` = #{userName}, </if>
 			<if test="name != null">`name` = #{name}, </if>
 			<if test="amount != null">`amount` = #{amount}, </if>
-			<if test="status != null">`status` = #{status}, </if>
-			<if test="applyDate != null">`apply_date` = #{applyDate}, </if>
-			<if test="purchaseDate != null">`purchase_date` = #{purchaseDate}, </if>
+			<if test="awardDate != null">`award_date` = #{awardDate}, </if>
+			<if test="awardType != null">`award_type` = #{awardType}, </if>
 			<if test="comment != null">`comment` = #{comment}</if>
 		</set>
 		where id = #{id}
 	</update>
 	
 	<delete id="delete">
-		delete from hl_purchase where id = #{value}
+		delete from hl_reward where id = #{value}
 	</delete>
 	
 	<delete id="deleteBatch">
-		delete from hl_purchase where id in 
+		delete from hl_reward where id in 
 		<foreach item="id" collection="array" open="(" separator="," close=")">
 			#{id}
 		</foreach>

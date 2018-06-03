@@ -26,6 +26,11 @@
 
 	<select id="queryList" resultType="com.suke.czx.modules.sys.entity.HlUserEntity">
 		select * from hl_user
+		<where>
+			<if test="userName != null">
+				and `user_name` = #{userName} 
+			</if>
+		</where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}

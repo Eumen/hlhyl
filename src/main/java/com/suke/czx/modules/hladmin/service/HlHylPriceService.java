@@ -27,4 +27,6 @@ public interface HlHylPriceService {
 	void delete(Integer id);
 	
 	void deleteBatch(Integer[] ids);
+	
+	String queryMaxPrice();
 }

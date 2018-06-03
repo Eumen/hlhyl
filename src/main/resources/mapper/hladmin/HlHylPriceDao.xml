@@ -14,6 +14,10 @@
 	<select id="queryObject" resultType="com.suke.czx.modules.hladmin.entity.HlHylPriceEntity">
 		select * from hl_hyl_price where id = #{value}
 	</select>
+	
+	<select id="queryMaxPrice" resultType="String">
+		select price from hl_hyl_price where id = (select max(id) from hl_hyl_price)
+	</select>
 
 	<select id="queryList" resultType="com.suke.czx.modules.hladmin.entity.HlHylPriceEntity">
 		select * from hl_hyl_price

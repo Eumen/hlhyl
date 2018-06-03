@@ -42,6 +42,11 @@ public class HlPurchaseController extends AbstractController {
 	 */
 	@RequestMapping("/list")
 	public R list(@RequestParam Map<String, Object> params) {
+		
+		String userName = this.getUser().getUsername();
+		if(!"admin1".equals(userName)){
+			params.put("userName", userName);
+		}
 		// 查询列表数据
 		Query query = new Query(params);
 
@@ -100,7 +105,7 @@ public class HlPurchaseController extends AbstractController {
 			return R.error("此笔申请已同意，不允许再次审核");
 		} else {
 			hlPurchase.setStatus(2);
-			hlPurchaseService.update(hlPurchase);
+			hlPurchaseService.audit(hlPurchase);
 			return R.ok();
 		}
 	}

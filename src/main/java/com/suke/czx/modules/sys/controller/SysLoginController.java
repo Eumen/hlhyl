@@ -99,6 +99,8 @@ public class SysLoginController extends AbstractController {
 	public Map<String, Object> register(HlUserEntity entity) throws IOException {
 		entity.getUserName();
 		entity.setTel(entity.getUserName());
+		entity.setAmount(0d);
+		entity.setLockAmount(0d);
 		// 生成token，并保存到数据库
 		hlUserService.save(entity);
 		return R.ok();

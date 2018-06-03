@@ -24,6 +24,8 @@ public interface HlPurchaseService {
 	
 	void update(HlPurchaseEntity hlPurchase);
 	
+	void audit(HlPurchaseEntity hlPurchase);
+	
 	void delete(Integer id);
 	
 	void deleteBatch(Integer[] ids);
