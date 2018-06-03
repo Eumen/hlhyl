@@ -23,17 +23,16 @@
 </head>
 <body class="hold-transition login-page">
 <div class="login-box" id="rrapp" v-cloak>
-  <div class="login-logo">
-    <b>华力汉语链</b>
+  <div class="login-logo" style="margin-top: 0px;">
+    <b>注册</b>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
-      <p class="login-box-msg">管理员登录</p>
       <div v-if="error" class="alert alert-danger alert-dismissible">
         <h4 style="margin-bottom: 0px;"><i class="fa fa-exclamation-circle"></i> {{errorMsg}}</h4>
       </div>
       <div class="form-group has-feedback">
-          <input type="text" class="form-control" v-model="username" placeholder="账号">
+          <input type="text" class="form-control" v-model="userName" placeholder="手机号码">
           <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
@@ -41,14 +40,29 @@
           <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-          <input type="text" class="form-control" v-model="captcha" @keyup.enter="login" placeholder="验证码">
-          <span class="glyphicon glyphicon-warning-sign form-control-feedback"></span>
+          <input type="password" class="form-control" v-model="password1" placeholder="确认密码">
+          <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-          <img alt="如果看不清楚，请单击图片刷新！" class="pointer" :src="src" @click="refreshCode">
-          &nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;" @click="refreshCode">点击刷新</a>
+          <input type="text" class="form-control" v-model="name" placeholder="姓名">
+          <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>
-
+      <div class="form-group has-feedback">
+          <input type="text" class="form-control" v-model="idCard" placeholder="身份证号">
+          <span class="glyphicon glyphicon-user form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+          <input type="text" class="form-control" v-model="bankName" placeholder="开户银行">
+          <span class="glyphicon glyphicon-user form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+          <input type="text" class="form-control" v-model="bankNo" placeholder="银行卡号">
+          <span class="glyphicon glyphicon-user form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+          <input type="text" class="form-control" v-model="recUser" placeholder="推荐人账号">
+          <span class="glyphicon glyphicon-user form-control-feedback"></span>
+      </div>
       <div class="row">
         <div class="col-xs-8">
           <div class="checkbox icheck">
@@ -56,7 +70,7 @@
         </div>
         <!-- /.col -->
         <div class="col-xs-4">
-          <button type="button" class="btn btn-primary btn-block btn-flat" @click="login">登录</button>
+          <button type="button" class="btn btn-primary btn-block btn-flat" @click="login">注册</button>
         </div>
         <!-- /.col -->
       </div>
@@ -76,12 +90,16 @@
     var vm = new Vue({
         el:'#rrapp',
         data:{
-            username: '',
+        	userName: '',
             password: '',
-            captcha: '',
+            password1: '',
+            name: '',
+            idCard: '',
+            bankName: '',
+            bankNo: '',
+            recUser: '',
             error: false,
-            errorMsg: '',
-            src: 'captcha.jpg'
+            errorMsg: ''
         },
         beforeCreate: function(){
             if(self != top){
@@ -89,27 +107,80 @@
             }
         },
         methods: {
-            refreshCode: function(){
-                this.src = "captcha.jpg?t=" + $.now();
-            },
             login: function () {
-                var data = "username="+vm.username+"&password="+vm.password+"&captcha="+vm.captcha;
+                var data = "userName="+vm.userName+"&password="+vm.password+"&name="+vm.name+"&idCard="+
+                			vm.idCard+"&bankName="+vm.bankName+"&bankNo="+vm.bankNo+"&recUser="+vm.recUser;
+                if(vm.validator()){
+                    return false;
+                }
+
                 $.ajax({
                     type: "POST",
-                    url: baseURL + "sys/login",
+                    url: baseURL + "sys/register",
                     data: data,
                     dataType: "json",
                     success: function(r){
                         if(r.code == 0){//登录成功
                             localStorage.setItem("token", r.token);
-                            parent.location.href ='index.html';
+                            vm.error = true;
+                            vm.errorMsg = "注册成功，请登陆";
+                            setTimeout(function(){
+	                            window.location.href ='login.html';
+                            }, 2000);
                         }else{
                             vm.error = true;
-                            vm.errorMsg = r.msg;
-                            vm.refreshCode();
+                            vm.errorMsg = r.message;
                         }
                     }
                 });
+            },
+            validator: function () {
+                if(isBlank(vm.userName)){
+                	vm.error = true;
+                    vm.errorMsg = "手机号码不能为空";
+                    return true;
+                }
+                if(isBlank(vm.name)){
+                	vm.error = true;
+                    vm.errorMsg = "姓名不能为空";
+                	return true;
+                }
+
+                if(isBlank(vm.password)){
+                	vm.error = true;
+                    vm.errorMsg = "密码不能为空";
+                    return true;
+                }
+                
+                if(isBlank(vm.idCard)){
+                	vm.error = true;
+                    vm.errorMsg = "身份证号不能为空";
+                    return true;
+                }
+                
+                if(isBlank(vm.bankName)){
+                	vm.error = true;
+                    vm.errorMsg = "开户银行";
+                    return true;
+                }
+                
+                if(isBlank(vm.bankNo)){
+                	vm.error = true;
+                    vm.errorMsg = "开户银行卡号不能为空";
+                    return true;
+                }
+                if(isBlank(vm.recUser)){
+                	vm.error = true;
+                    vm.errorMsg = "推荐人不能为空";
+                    return true;
+                }
+                
+                if(vm.password1 != vm.password){
+                	vm.error = true;
+                    vm.errorMsg = "密码不一致";
+                    return true;
+                }
+
             }
         }
     });

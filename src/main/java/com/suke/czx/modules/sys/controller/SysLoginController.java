@@ -4,7 +4,9 @@ import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
 import com.suke.czx.common.utils.R;
 import com.suke.czx.common.utils.ShiroUtils;
+import com.suke.czx.modules.sys.entity.HlUserEntity;
 import com.suke.czx.modules.sys.entity.SysUserEntity;
+import com.suke.czx.modules.sys.service.HlUserService;
 import com.suke.czx.modules.sys.service.SysUserService;
 import com.suke.czx.modules.sys.service.SysUserTokenService;
 import org.apache.commons.io.IOUtils;
@@ -37,20 +39,22 @@ public class SysLoginController extends AbstractController {
 	private SysUserService sysUserService;
 	@Autowired
 	private SysUserTokenService sysUserTokenService;
+	@Autowired
+	private HlUserService hlUserService;
 
 	/**
 	 * 验证码
 	 */
 	@RequestMapping("captcha.jpg")
-	public void captcha(HttpServletResponse response)throws ServletException, IOException {
+	public void captcha(HttpServletResponse response) throws ServletException, IOException {
 		response.setHeader("Cache-Control", "no-store, no-cache");
 		response.setContentType("image/jpeg");
 
-		//生成文字验证码
+		// 生成文字验证码
 		String text = producer.createText();
-		//生成图片验证码
+		// 生成图片验证码
 		BufferedImage image = producer.createImage(text);
-		//保存到shiro session
+		// 保存到shiro session
 		ShiroUtils.setSessionAttribute(Constants.KAPTCHA_SESSION_KEY, text);
 
 		ServletOutputStream out = response.getOutputStream();
@@ -62,32 +66,43 @@ public class SysLoginController extends AbstractController {
 	 * 登录
 	 */
 	@RequestMapping(value = "/sys/login", method = RequestMethod.POST)
-	public Map<String, Object> login(String username, String password, String captcha)throws IOException {
-		//本项目已实现，前后端完全分离，但页面还是跟项目放在一起了，所以还是会依赖session
-		//如果想把页面单独放到nginx里，实现前后端完全分离，则需要把验证码注释掉(因为不再依赖session了)
+	public Map<String, Object> login(String username, String password, String captcha) throws IOException {
+		// 本项目已实现，前后端完全分离，但页面还是跟项目放在一起了，所以还是会依赖session
+		// 如果想把页面单独放到nginx里，实现前后端完全分离，则需要把验证码注释掉(因为不再依赖session了)
 		String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
-		if(!captcha.equalsIgnoreCase(kaptcha)){
+		if (!captcha.equalsIgnoreCase(kaptcha)) {
 			return R.error("验证码不正确");
 		}
 
-		//用户信息
+		// 用户信息
 		SysUserEntity user = sysUserService.queryByUserName(username);
 
-		//账号不存在、密码错误
-		if(user == null || !user.getPassword().equals(new Sha256Hash(password, user.getSalt()).toHex())) {
+		// 账号不存在、密码错误
+		if (user == null || !user.getPassword().equals(new Sha256Hash(password, user.getSalt()).toHex())) {
 			return R.error("账号或密码不正确");
 		}
 
-		//账号锁定
-		if(user.getStatus() == 0){
+		// 账号锁定
+		if (user.getStatus() == 0) {
 			return R.error("账号已被锁定,请联系管理员");
 		}
 
-		//生成token，并保存到数据库
+		// 生成token，并保存到数据库
 		R r = sysUserTokenService.createToken(user.getUserId());
 		return r;
 	}
 
+	/**
+	 * 登录
+	 */
+	@RequestMapping(value = "/sys/register", method = RequestMethod.POST)
+	public Map<String, Object> register(HlUserEntity entity) throws IOException {
+		entity.getUserName();
+		entity.setTel(entity.getUserName());
+		// 生成token，并保存到数据库
+		hlUserService.save(entity);
+		return R.ok();
+	}
 
 	/**
 	 * 退出
@@ -97,5 +112,5 @@ public class SysLoginController extends AbstractController {
 		sysUserTokenService.logout(getUserId());
 		return R.ok();
 	}
-	
+
 }

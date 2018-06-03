@@ -29,6 +29,9 @@ public class SysUserEntity implements Serializable {
 	 */
 	@NotBlank(message="用户名不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String username;
+	
+	@NotBlank(message="姓名不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	private String name;
 
 	/**
 	 * 密码
@@ -44,8 +47,6 @@ public class SysUserEntity implements Serializable {
 	/**
 	 * 邮箱
 	 */
-	@NotBlank(message="邮箱不能为空", groups = {AddGroup.class, UpdateGroup.class})
-	@Email(message="邮箱格式不正确", groups = {AddGroup.class, UpdateGroup.class})
 	private String email;
 
 	/**
@@ -105,6 +106,15 @@ public class SysUserEntity implements Serializable {
 		return username;
 	}
 	
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	/**
 	 * 设置：密码
 	 * @param password 密码

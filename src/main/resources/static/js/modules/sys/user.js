@@ -5,6 +5,7 @@ $(function () {
         colModel: [			
 			{ label: '用户ID', name: 'userId', index: "user_id", width: 45, key: true },
 			{ label: '用户名', name: 'username', width: 75 },
+			{ label: '姓名', name: 'name', width: 75 },
 			{ label: '邮箱', name: 'email', width: 90 },
 			{ label: '手机号', name: 'mobile', width: 100 },
 			{ label: '状态', name: 'status', width: 80, formatter: function(value, options, row){
@@ -151,21 +152,16 @@ var vm = new Vue({
                 alert("用户名不能为空");
                 return true;
             }
+            if(isBlank(vm.user.name)){
+            	alert("姓名不能为空");
+            	return true;
+            }
 
             if(vm.user.userId == null && isBlank(vm.user.password)){
                 alert("密码不能为空");
                 return true;
             }
 
-            if(isBlank(vm.user.email)){
-                alert("邮箱不能为空");
-                return true;
-            }
-
-            if(!validator.isEmail(vm.user.email)){
-                alert("邮箱格式不正确");
-                return true;
-			}
         }
 	}
 });

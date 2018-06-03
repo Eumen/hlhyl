@@ -55,8 +55,9 @@
           </div>
         </div>
         <!-- /.col -->
-        <div class="col-xs-4">
-          <button type="button" class="btn btn-primary btn-block btn-flat" @click="login">登录</button>
+        <div class="col-xs-4 row">
+          <button type="button" class="btn btn-primary btn-block" @click="login">登录</button>
+          <button type="button" class="btn btn-primary btn-block btn-flat" @click="register">注册</button>
         </div>
         <!-- /.col -->
       </div>
@@ -110,6 +111,9 @@
                         }
                     }
                 });
+            },
+            register: function(){
+            	window.location.href = 'register.html'
             }
         }
     });

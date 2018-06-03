@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.suke.czx.modules.sys.dao.HlUserDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.suke.czx.modules.sys.entity.HlUserEntity" id="hlUserMap">
+        <result property="id" column="id"/>
+        <result property="userName" column="user_name"/>
+        <result property="name" column="name"/>
+        <result property="idCard" column="id_card"/>
+        <result property="tel" column="tel"/>
+        <result property="bankName" column="bank_name"/>
+        <result property="bankNo" column="bank_no"/>
+        <result property="amount" column="amount"/>
+        <result property="lockAmount" column="lock_amount"/>
+        <result property="recUser" column="rec_user"/>
+        <result property="recName" column="rec_name"/>
+        <result property="registerDate" column="register_date"/>
+        <result property="comment" column="comment"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.suke.czx.modules.sys.entity.HlUserEntity">
+		select * from hl_user where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.suke.czx.modules.sys.entity.HlUserEntity">
+		select * from hl_user
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from hl_user 
+	</select>
+	 
+	<insert id="save" parameterType="com.suke.czx.modules.sys.entity.HlUserEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into hl_user
+		(
+			`user_name`, 
+			`name`, 
+			`id_card`, 
+			`tel`, 
+			`bank_name`, 
+			`bank_no`, 
+			`amount`, 
+			`lock_amount`, 
+			`rec_user`, 
+			`rec_name`, 
+			`register_date`, 
+			`comment`
+		)
+		values
+		(
+			#{userName}, 
+			#{name}, 
+			#{idCard}, 
+			#{tel}, 
+			#{bankName}, 
+			#{bankNo}, 
+			#{amount}, 
+			#{lockAmount}, 
+			#{recUser}, 
+			#{recName}, 
+			#{registerDate}, 
+			#{comment}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.suke.czx.modules.sys.entity.HlUserEntity">
+		update hl_user 
+		<set>
+			<if test="userName != null">`user_name` = #{userName}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="idCard != null">`id_card` = #{idCard}, </if>
+			<if test="tel != null">`tel` = #{tel}, </if>
+			<if test="bankName != null">`bank_name` = #{bankName}, </if>
+			<if test="bankNo != null">`bank_no` = #{bankNo}, </if>
+			<if test="amount != null">`amount` = #{amount}, </if>
+			<if test="lockAmount != null">`lock_amount` = #{lockAmount}, </if>
+			<if test="recUser != null">`rec_user` = #{recUser}, </if>
+			<if test="recName != null">`rec_name` = #{recName}, </if>
+			<if test="registerDate != null">`register_date` = #{registerDate}, </if>
+			<if test="comment != null">`comment` = #{comment}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from hl_user where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from hl_user where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -61,7 +61,9 @@ function hasPermission(permission) {
         return false;
     }
 }
-
+window.alert = function(msg){
+	alert(msg);
+}
 //重写alert
 window.alert = function(msg, callback){
 	parent.layer.alert(msg, function(index){
