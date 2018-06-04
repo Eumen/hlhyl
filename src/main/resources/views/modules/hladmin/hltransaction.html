@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../css/font-awesome.min.css">
+<link rel="stylesheet" href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet" href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../css/main.css">
+<script src="../../libs/jquery.min.js"></script>
+<script src="../../plugins/layer/layer.js"></script>
+<script src="../../libs/bootstrap.min.js"></script>
+<script src="../../libs/vue.min.js"></script>
+<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../../js/common.js"></script>
+</head>
+<body>
+<div id="rrapp" v-cloak>
+<!-- 	<div v-show="showList"> -->
+<!-- 		<div class="grid-btn"> -->
+<!-- 			<a v-if="hasPermission('hladmin:hltransaction:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a> -->
+<!-- 			<a v-if="hasPermission('hladmin:hltransaction:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a> -->
+<!-- 			<a v-if="hasPermission('hladmin:hltransaction:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a> -->
+<!-- 		</div> -->
+<!-- 	    <table id="jqGrid"></table> -->
+<!-- 	    <div id="jqGridPager"></div> -->
+<!--     </div> -->
+    
+    <div class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+<!-- 											<div class="form-group"> -->
+<!-- 			   	<div class="col-sm-2 control-label">用户登陆名</div> -->
+<!-- 			   	<div class="col-sm-10"> -->
+<!-- 			      <input type="text" class="form-control" v-model="hlTransaction.userName" placeholder="用户登陆名"/> -->
+<!-- 			    </div> -->
+<!-- 			</div> -->
+<!-- 									<div class="form-group"> -->
+<!-- 			   	<div class="col-sm-2 control-label">姓名</div> -->
+<!-- 			   	<div class="col-sm-10"> -->
+<!-- 			      <input type="text" class="form-control" v-model="hlTransaction.name" placeholder="姓名"/> -->
+<!-- 			    </div> -->
+<!-- 			</div> -->
+			<div class="form-group">
+				<div class="col-sm-2 control-label">交易类型</div>
+				<label class="radio-inline">
+					<input type="radio" name="type" value="1" v-model="hlTransaction.type" v-on:click="account1"/> 对私账户
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="type" value="2" v-model="hlTransaction.type" v-on:click="account2"/> 对公账户
+				</label>
+			</div>
+			<div v-if="hlTransaction.type == 1" class="form-group">
+			
+									<div class="form-group">
+				   	<div class="col-sm-2 control-label">转账账号</div>
+				   	<div class="col-sm-10">
+				      <input type="text" class="form-control" v-model="hlTransaction.targetUserName" placeholder="转账账号"/>
+				    </div>
+				</div>
+										<div class="form-group">
+				   	<div class="col-sm-2 control-label">转账姓名</div>
+				   	<div class="col-sm-10">
+				      <input type="text" class="form-control" v-model="hlTransaction.targetName" placeholder="转账姓名"/>
+				    </div>
+				</div>
+			</div>
+			<div v-if="hlTransaction.type == 2" class="form-group">
+			
+									<div class="form-group">
+				   	<div class="col-sm-2 control-label">转账账号</div>
+				   	<div class="col-sm-10">
+				      <input type="text" class="form-control" v-model="hlTransaction.targetUserName" readonly="readonly" placeholder="转账账号"/>
+				    </div>
+				</div>
+										<div class="form-group">
+				   	<div class="col-sm-2 control-label">转账姓名</div>
+				   	<div class="col-sm-10">
+				      <input type="text" class="form-control" v-model="hlTransaction.targetName" readonly="readonly" placeholder="转账姓名"/>
+				    </div>
+				</div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">交易数量</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="hlTransaction.amount" placeholder="交易数量"/>
+			    </div>
+			</div>
+									<div class="form-group">
+			   	<div class="col-sm-2 control-label">备注</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="hlTransaction.comment" placeholder="备注"/>
+			    </div>
+			</div>
+							<div class="form-group">
+				<div class="col-sm-2 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="save" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script src="../../js/modules/hladmin/hltransaction.js"></script>
+</body>
+</html>

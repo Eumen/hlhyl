@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
  * 
  * @author czx
  * @email ${email}
- * @date 2018-06-03 13:05:01
+ * @date 2018-06-04 22:36:46
  */
 @Mapper
 public interface HlTransactionDao extends BaseDao<HlTransactionEntity> {

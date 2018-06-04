@@ -1,9 +1,10 @@
 package com.suke.czx.modules.hladmin.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,83 +17,75 @@ import com.suke.czx.common.utils.Query;
 import com.suke.czx.common.utils.R;
 import com.suke.czx.modules.hladmin.entity.HlTransactionEntity;
 import com.suke.czx.modules.hladmin.service.HlTransactionService;
-
-
-
+import com.suke.czx.modules.sys.controller.AbstractController;
+import com.suke.czx.modules.sys.entity.HlUserEntity;
+import com.suke.czx.modules.sys.entity.SysUserEntity;
+import com.suke.czx.modules.sys.service.HlUserService;
 
 /**
  * 
  * 
  * @author czx
  * @email ${email}
- * @date 2018-06-03 13:05:01
+ * @date 2018-06-04 11:15:16
  */
 @RestController
 @RequestMapping("/hladmin/hltransaction")
-public class HlTransactionController {
-    @Autowired
-    private HlTransactionService hlTransactionService;
+public class HlTransactionController extends AbstractController {
+	@Autowired
+	private HlTransactionService hlTransactionService;
 
-    /**
-     * 列表
-     */
-    @RequestMapping("/list")
-    @RequiresPermissions("hladmin:hltransaction:list")
-    public R list(@RequestParam Map<String, Object> params){
-        //查询列表数据
-        Query query = new Query(params);
+	@Autowired
+	private HlUserService hlUserService;
 
-        List<HlTransactionEntity> hlTransactionList = hlTransactionService.queryList(query);
-        int total = hlTransactionService.queryTotal(query);
+	/**
+	 * 列表
+	 */
+	@RequestMapping("/list")
+	public R list(@RequestParam Map<String, Object> params) {
+		// 查询列表数据
+		Query query = new Query(params);
 
-        PageUtils pageUtil = new PageUtils(hlTransactionList, total, query.getLimit(), query.getPage());
+		List<HlTransactionEntity> hlTransactionList = hlTransactionService.queryList(query);
+		int total = hlTransactionService.queryTotal(query);
 
-        return R.ok().put("page", pageUtil);
-    }
+		PageUtils pageUtil = new PageUtils(hlTransactionList, total, query.getLimit(), query.getPage());
 
+		return R.ok().put("page", pageUtil);
+	}
 
-    /**
-     * 信息
-     */
-    @RequestMapping("/info/{id}")
-    @RequiresPermissions("hladmin:hltransaction:info")
-    public R info(@PathVariable("id") Integer id){
-			HlTransactionEntity hlTransaction = hlTransactionService.queryObject(id);
+	/**
+	 * 信息
+	 */
+	@RequestMapping("/info/{id}")
+	public R info(@PathVariable("id") Integer id) {
+		HlTransactionEntity hlTransaction = hlTransactionService.queryObject(id);
 
-        return R.ok().put("hlTransaction", hlTransaction);
-    }
+		return R.ok().put("hlTransaction", hlTransaction);
+	}
 
-    /**
-     * 保存
-     */
-    @RequestMapping("/save")
-    @RequiresPermissions("hladmin:hltransaction:save")
-    public R save(@RequestBody HlTransactionEntity hlTransaction){
-			hlTransactionService.save(hlTransaction);
+	/**
+	 * 保存
+	 */
+	@RequestMapping("/save")
+	public R save(@RequestBody HlTransactionEntity hlTransaction) {
+		String userName = hlTransaction.getTargetUserName();
+		String name = hlTransaction.getTargetName();
+		Map<String, Object> queryUser = new HashMap<String, Object>();
+		queryUser.put("userName", userName);
+		queryUser.put("name", name);
+		List<HlUserEntity> listUser = hlUserService.queryList(queryUser);
 
-        return R.ok();
-    }
+		if (CollectionUtils.isEmpty(listUser)) {
+			return R.error("目标转账人不存在");
+		}
 
-    /**
-     * 修改
-     */
-    @RequestMapping("/update")
-    @RequiresPermissions("hladmin:hltransaction:update")
-    public R update(@RequestBody HlTransactionEntity hlTransaction){
-			hlTransactionService.update(hlTransaction);
+		SysUserEntity user = this.getUser();
+		hlTransaction.setUserName(user.getUsername());
+		hlTransaction.setName(user.getName());
+		hlTransactionService.save(hlTransaction);
 
-        return R.ok();
-    }
+		return R.ok();
+	}
 
-    /**
-     * 删除
-     */
-    @RequestMapping("/delete")
-    @RequiresPermissions("hladmin:hltransaction:delete")
-    public R delete(@RequestBody Integer[] ids){
-			hlTransactionService.deleteBatch(ids);
-
-        return R.ok();
-    }
-	
 }

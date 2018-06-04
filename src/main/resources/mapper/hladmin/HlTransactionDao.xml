@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.suke.czx.modules.hladmin.dao.HlTransactionDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.suke.czx.modules.hladmin.entity.HlTransactionEntity" id="hlTransactionMap">
+        <result property="id" column="id"/>
+        <result property="userName" column="user_name"/>
+        <result property="name" column="name"/>
+        <result property="targetUserName" column="target_user_name"/>
+        <result property="targetName" column="target_name"/>
+        <result property="type" column="type"/>
+        <result property="amount" column="amount"/>
+        <result property="realAmount" column="real_amount"/>
+        <result property="tranDate" column="tran_date"/>
+        <result property="comment" column="comment"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.suke.czx.modules.hladmin.entity.HlTransactionEntity">
+		select * from hl_transaction where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.suke.czx.modules.hladmin.entity.HlTransactionEntity">
+		select * from hl_transaction
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from hl_transaction 
+	</select>
+	 
+	<insert id="save" parameterType="com.suke.czx.modules.hladmin.entity.HlTransactionEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into hl_transaction
+		(
+			`user_name`, 
+			`name`, 
+			`target_user_name`, 
+			`target_name`, 
+			`type`, 
+			`amount`, 
+			`real_amount`, 
+			`tran_date`, 
+			`comment`
+		)
+		values
+		(
+			#{userName}, 
+			#{name}, 
+			#{targetUserName}, 
+			#{targetName}, 
+			#{type}, 
+			#{amount}, 
+			#{realAmount}, 
+			#{tranDate}, 
+			#{comment}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.suke.czx.modules.hladmin.entity.HlTransactionEntity">
+		update hl_transaction 
+		<set>
+			<if test="userName != null">`user_name` = #{userName}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="targetUserName != null">`target_user_name` = #{targetUserName}, </if>
+			<if test="targetName != null">`target_name` = #{targetName}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="amount != null">`amount` = #{amount}, </if>
+			<if test="realAmount != null">`real_amount` = #{realAmount}, </if>
+			<if test="tranDate != null">`tran_date` = #{tranDate}, </if>
+			<if test="comment != null">`comment` = #{comment}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from hl_transaction where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from hl_transaction where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

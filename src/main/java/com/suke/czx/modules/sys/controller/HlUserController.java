@@ -74,6 +74,17 @@ public class HlUserController extends AbstractController {
 	}
 
 	/**
+	 * 信息
+	 */
+	@RequestMapping("/currentinfo")
+	public R currentinfo() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("userName", this.getUser().getUsername());
+		HlUserEntity hlUser = hlUserService.queryList(map).get(0);
+		return R.ok().put("hlUser", hlUser);
+	}
+
+	/**
 	 * 保存
 	 */
 	@RequestMapping("/save")

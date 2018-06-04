@@ -30,6 +30,9 @@
 			<if test="userName != null">
 				and `user_name` = #{userName} 
 			</if>
+			<if test="name != null">
+				and `name` = #{name} 
+			</if>
 		</where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
@@ -99,7 +102,6 @@
 		</set>
 		where id = #{id}
 	</update>
-	
 	<delete id="delete">
 		delete from hl_user where id = #{value}
 	</delete>

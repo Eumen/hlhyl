@@ -83,6 +83,8 @@ public class HlPurchaseServiceImpl implements HlPurchaseService {
 			recMap.put("userName", userList.get(0).getRecUser());
 			List<HlUserEntity> recUserList = hlUserDao.queryList(recMap);
 			if (!StringUtils.isEmpty(recUserList)) {
+				
+				HlUserEntity recUser = recUserList.get(0);
 				if (recUserList.get(0).getLockAmount() > 0) {
 					HlUserEntity user = userList.get(0);
 					HlRewardEntity hre = new HlRewardEntity();
@@ -91,9 +93,14 @@ public class HlPurchaseServiceImpl implements HlPurchaseService {
 					hre.setAwardDate(new Date());
 					hre.setAwardType(2);
 					// 投资金额 * 推荐人锁仓金额所求的百分比
-					hre.setAmount(hlPurchase.getAmount() * RangeUtils.lockRange(recUserList.get(0).getLockAmount()));
+					double recAward = hlPurchase.getAmount() * RangeUtils.recRange(recUserList.get(0).getLockAmount());
+					hre.setAmount(recAward);
 					hre.setComment("推荐用户" + hlPurchase.getName() + "直接奖金");
 					hlRewardDao.save(hre);
+					
+					// 更新推荐人账户流通资金
+					recUser.setAmount(recUser.getAmount() + recAward);
+					hlUserDao.update(recUser);
 				}
 			}
 		}

@@ -9,7 +9,7 @@ import java.util.Date;
  * 
  * @author czx
  * @email ${email}
- * @date 2018-06-03 13:05:01
+ * @date 2018-06-04 22:36:46
  */
 public class HlTransactionEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -20,16 +20,18 @@ public class HlTransactionEntity implements Serializable {
 	private String userName;
 	//姓名
 	private String name;
-	//
-	private Integer recUserId;
-	//
-	private String recUserName;
+	//转账账号
+	private String targetUserName;
+	//转账姓名
+	private String targetName;
 	//交易类型： 1. 对私交易， 2. 对公交易
 	private Integer type;
 	//交易数量
 	private Double amount;
 	//对公账户收取手续费
 	private Double realAmount;
+	//
+	private Date tranDate;
 	//
 	private String comment;
 
@@ -70,28 +72,28 @@ public class HlTransactionEntity implements Serializable {
 		return name;
 	}
 	/**
-	 * 设置：
+	 * 设置：转账账号
 	 */
-	public void setRecUserId(Integer recUserId) {
-		this.recUserId = recUserId;
+	public void setTargetUserName(String targetUserName) {
+		this.targetUserName = targetUserName;
 	}
 	/**
-	 * 获取：
+	 * 获取：转账账号
 	 */
-	public Integer getRecUserId() {
-		return recUserId;
+	public String getTargetUserName() {
+		return targetUserName;
 	}
 	/**
-	 * 设置：
+	 * 设置：转账姓名
 	 */
-	public void setRecUserName(String recUserName) {
-		this.recUserName = recUserName;
+	public void setTargetName(String targetName) {
+		this.targetName = targetName;
 	}
 	/**
-	 * 获取：
+	 * 获取：转账姓名
 	 */
-	public String getRecUserName() {
-		return recUserName;
+	public String getTargetName() {
+		return targetName;
 	}
 	/**
 	 * 设置：交易类型： 1. 对私交易， 2. 对公交易
@@ -128,6 +130,18 @@ public class HlTransactionEntity implements Serializable {
 	 */
 	public Double getRealAmount() {
 		return realAmount;
+	}
+	/**
+	 * 设置：
+	 */
+	public void setTranDate(Date tranDate) {
+		this.tranDate = tranDate;
+	}
+	/**
+	 * 获取：
+	 */
+	public Date getTranDate() {
+		return tranDate;
 	}
 	/**
 	 * 设置：
