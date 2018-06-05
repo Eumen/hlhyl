@@ -40,6 +40,23 @@
 	
  	<select id="queryTotal" resultType="int">
 		select count(*) from hl_reward 
+		<where>
+        	<if test="userName != null">
+				and `user_name` = #{userName} 
+			</if>
+			<if test="awardType != null">
+				and `award_type` = #{awardType} 
+			</if>
+        </where>
+	</select>
+	
+ 	<select id="isGenerate" resultType="int">
+		select count(*) from hl_reward 
+		<where>
+        	<if test="awardDate != null">
+				and DATE_FORMAT(`award_Date`, '%Y-%m-%d') = #{awardDate} 
+			</if>
+        </where>
 	</select>
 	 
 	<insert id="save" parameterType="com.suke.czx.modules.hladmin.entity.HlRewardEntity" useGeneratedKeys="true" keyProperty="id">

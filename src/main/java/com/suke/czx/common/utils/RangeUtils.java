@@ -17,7 +17,7 @@ final public class RangeUtils {
 			range = 0.12d;
 		} else if (d >= 10000 && d <= 49999) {
 			range = 0.15d;
-		} else if (d > 50000 && d <= 99999) {
+		} else if (d >= 50000 && d <= 99999) {
 			range = 0.18d;
 		} else if (d >= 100000) {
 			range = 0.20d;
@@ -35,7 +35,7 @@ final public class RangeUtils {
 			range = 0.0015d;
 		} else if (d >= 10000 && d <= 49999) {
 			range = 0.002d;
-		} else if (d > 50000 && d <= 99999) {
+		} else if (d >= 50000 && d <= 99999) {
 			range = 0.0025;
 		} else if (d >= 100000) {
 			range = 0.003;

@@ -27,4 +27,8 @@ public interface HlRewardService {
 	void delete(Integer id);
 	
 	void deleteBatch(Integer[] ids);
+
+	void generate();
+	
+	int isGenerate(String awardDate);
 }

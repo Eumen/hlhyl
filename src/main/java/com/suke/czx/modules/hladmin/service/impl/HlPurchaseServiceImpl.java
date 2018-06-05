@@ -95,7 +95,7 @@ public class HlPurchaseServiceImpl implements HlPurchaseService {
 					// 投资金额 * 推荐人锁仓金额所求的百分比
 					double recAward = hlPurchase.getAmount() * RangeUtils.recRange(recUserList.get(0).getLockAmount());
 					hre.setAmount(recAward);
-					hre.setComment("推荐用户" + hlPurchase.getName() + "直接奖金");
+					hre.setComment("推荐用户" + hlPurchase.getName() + "直推奖金");
 					hlRewardDao.save(hre);
 					
 					// 更新推荐人账户流通资金
