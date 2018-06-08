@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,16 +50,18 @@ public class HlUserController extends AbstractController {
 
 		Map<String, Object> userQueryMap = new HashMap<String, Object>();
 		userQueryMap.put("userName", this.getUser().getUsername());
-		HlUserEntity user = hlUserService.queryList(userQueryMap).get(0);
-		map.put("amount", user.getAmount());
-		map.put("lockAmount", user.getLockAmount());
-		map.put("recUser", user.getRecUser());
+		List<HlUserEntity> userList = hlUserService.queryList(userQueryMap);
+		if (!CollectionUtils.isEmpty(userList)) {
 
-		Map<String, Object> mapReward = new HashMap<String, Object>();
-		mapReward.put("userName", user.getUserName());
-		double recreward = hlRewardService.queryList(mapReward).stream().map(HlRewardEntity::getAmount)
-				.mapToDouble(Double::doubleValue).sum();
-		map.put("recReward", recreward);
+			map.put("amount", userList.get(0).getAmount());
+			map.put("lockAmount", userList.get(0).getLockAmount());
+			map.put("recUser", userList.get(0).getRecUser());
+			Map<String, Object> mapReward = new HashMap<String, Object>();
+			mapReward.put("userName", userList.get(0).getUserName());
+			double recreward = hlRewardService.queryList(mapReward).stream().filter(award -> award.getAwardType() == 2)
+					.map(HlRewardEntity::getAmount).mapToDouble(Double::doubleValue).sum();
+			map.put("recReward", recreward);
+		}
 
 		return R.ok().put("hlUser", map);
 	}

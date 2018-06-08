@@ -5,7 +5,7 @@
 	<groupId>com.hl</groupId>
 	<artifactId>hlhyl</artifactId>
 	<version>1.0.0</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 	<description>hlhyl</description>
 
 	<parent>

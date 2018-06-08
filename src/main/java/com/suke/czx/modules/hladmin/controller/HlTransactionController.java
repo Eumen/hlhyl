@@ -80,9 +80,21 @@ public class HlTransactionController extends AbstractController {
 			return R.error("目标转账人不存在");
 		}
 
+		if (hlTransaction.getAmount() <= 0){
+			return R.error("转账金额必须大于0");
+		}
+
 		SysUserEntity user = this.getUser();
 		hlTransaction.setUserName(user.getUsername());
 		hlTransaction.setName(user.getName());
+		Map<String, Object> ownQueryUser = new HashMap<String, Object>();
+		ownQueryUser.put("userName", user.getUsername());
+		ownQueryUser.put("name", user.getName());
+		List<HlUserEntity> listOwnUser = hlUserService.queryList(ownQueryUser);
+		if (listOwnUser.get(0).getAmount() < hlTransaction.getAmount()) {
+			return R.error("转账金额不允许大于流通持仓金额");
+		}
+
 		hlTransactionService.save(hlTransaction);
 
 		return R.ok();

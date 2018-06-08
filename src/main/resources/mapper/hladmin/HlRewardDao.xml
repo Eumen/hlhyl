@@ -53,6 +53,7 @@
  	<select id="isGenerate" resultType="int">
 		select count(*) from hl_reward 
 		<where>
+			award_type = '1'
         	<if test="awardDate != null">
 				and DATE_FORMAT(`award_Date`, '%Y-%m-%d') = #{awardDate} 
 			</if>

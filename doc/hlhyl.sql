@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-06-02 14:46:15
+Date: 2018-06-06 20:57:20
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -25,7 +25,7 @@ CREATE TABLE `hl_hyl_price` (
   `price_date` datetime NOT NULL,
   `comment` varchar(45) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Records of hl_hyl_price
@@ -36,16 +36,16 @@ CREATE TABLE `hl_hyl_price` (
 -- ----------------------------
 DROP TABLE IF EXISTS `hl_purchase`;
 CREATE TABLE `hl_purchase` (
-  `id` int(11) NOT NULL COMMENT '货币购买明细表',
-  `user_id` int(11) NOT NULL,
-  `user_name` varchar(45) COLLATE utf8_bin NOT NULL,
-  `amount` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '货币购买明细表',
+  `user_name` varchar(45) COLLATE utf8_bin NOT NULL COMMENT '登陆名',
+  `name` varchar(45) COLLATE utf8_bin NOT NULL COMMENT '用户姓名',
+  `amount` int(11) NOT NULL COMMENT '购买数量',
   `status` int(11) NOT NULL COMMENT '购买状态： 1. 申请   2. 已购买',
-  `apply_date` datetime NOT NULL,
+  `apply_date` datetime NOT NULL COMMENT '申请日期',
   `purchase_date` datetime DEFAULT NULL COMMENT ' 审核日期',
-  `comment` varchar(45) COLLATE utf8_bin DEFAULT NULL,
+  `comment` varchar(45) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='购买货币申请';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='购买货币申请';
 
 -- ----------------------------
 -- Records of hl_purchase
@@ -57,14 +57,14 @@ CREATE TABLE `hl_purchase` (
 DROP TABLE IF EXISTS `hl_reward`;
 CREATE TABLE `hl_reward` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '会员奖金明细表',
-  `user_id` int(11) NOT NULL,
-  `user_name` varchar(45) COLLATE utf8_bin NOT NULL,
-  `amount` varchar(45) COLLATE utf8_bin DEFAULT NULL,
-  `award_date` date DEFAULT NULL,
-  `award_type` double DEFAULT NULL COMMENT '0. 锁仓奖励\n1. 直推奖励',
+  `user_name` varchar(11) COLLATE utf8_bin NOT NULL COMMENT '用户登陆名',
+  `name` varchar(45) COLLATE utf8_bin NOT NULL COMMENT '姓名',
+  `amount` double DEFAULT NULL,
+  `award_date` datetime DEFAULT NULL,
+  `award_type` int(11) DEFAULT NULL COMMENT '1. 锁仓奖励2. 直推奖励',
   `comment` varchar(45) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Records of hl_reward
@@ -76,16 +76,17 @@ CREATE TABLE `hl_reward` (
 DROP TABLE IF EXISTS `hl_transaction`;
 CREATE TABLE `hl_transaction` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '会员交易明细表',
-  `user_id` int(11) NOT NULL,
-  `user_name` varchar(45) COLLATE utf8_bin NOT NULL,
-  `rec_user_id` int(11) NOT NULL,
-  `rec_user_name` varchar(45) COLLATE utf8_bin NOT NULL,
+  `user_name` varchar(11) COLLATE utf8_bin NOT NULL COMMENT '用户登陆名',
+  `name` varchar(45) COLLATE utf8_bin NOT NULL COMMENT '姓名',
+  `target_user_name` varchar(11) COLLATE utf8_bin NOT NULL COMMENT '转账账号',
+  `target_name` varchar(45) COLLATE utf8_bin NOT NULL COMMENT '转账姓名',
   `type` int(11) NOT NULL COMMENT '交易类型： 1. 对私交易， 2. 对公交易',
   `amount` double NOT NULL DEFAULT '0' COMMENT '交易数量',
   `real_amount` double NOT NULL COMMENT '对公账户收取手续费',
+  `tran_date` datetime DEFAULT NULL,
   `comment` varchar(45) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Records of hl_transaction
@@ -111,11 +112,12 @@ CREATE TABLE `hl_user` (
   `comment` varchar(45) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `tel_UNIQUE` (`tel`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Records of hl_user
 -- ----------------------------
+INSERT INTO `hl_user` VALUES ('1','admin1', 'lzg', 'lzg', '15524641188', '农业银行', '公司账户', '0', '0', 'admin', 'admin', '2018-06-02', null);
 
 -- ----------------------------
 -- Table structure for `qrtz_blob_triggers`
@@ -270,7 +272,7 @@ CREATE TABLE `qrtz_scheduler_state` (
 -- ----------------------------
 -- Records of qrtz_scheduler_state
 -- ----------------------------
-INSERT INTO `qrtz_scheduler_state` VALUES ('RenrenScheduler', 'USER-20160331BS1527921770155', '1527921955858', '15000');
+INSERT INTO `qrtz_scheduler_state` VALUES ('RenrenScheduler', 'USER-20160331BS1528041222189', '1528041287887', '15000');
 
 -- ----------------------------
 -- Table structure for `qrtz_simple_triggers`
@@ -374,7 +376,7 @@ CREATE TABLE `schedule_job` (
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`job_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='定时任务';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='定时任务';
 
 -- ----------------------------
 -- Records of schedule_job
@@ -397,17 +399,11 @@ CREATE TABLE `schedule_job_log` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`log_id`),
   KEY `job_id` (`job_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='定时任务日志';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='定时任务日志';
 
 -- ----------------------------
 -- Records of schedule_job_log
 -- ----------------------------
-INSERT INTO `schedule_job_log` VALUES ('1', '1', 'testTask', 'test1', 'test', '1', 'java.lang.NoSuchMethodException: com.suke.czx.modules.job.task.TestTask.test1(java.lang.String)', '3', '2018-06-01 21:00:00');
-INSERT INTO `schedule_job_log` VALUES ('2', '1', 'testTask', 'test1', 'test', '1', 'java.lang.NoSuchMethodException: com.suke.czx.modules.job.task.TestTask.test1(java.lang.String)', '1', '2018-06-01 21:30:00');
-INSERT INTO `schedule_job_log` VALUES ('3', '1', 'testTask', 'test1', 'test', '1', 'java.lang.NoSuchMethodException: com.suke.czx.modules.job.task.TestTask.test1(java.lang.String)', '1', '2018-06-01 22:30:00');
-INSERT INTO `schedule_job_log` VALUES ('4', '1', 'testTask', 'test1', 'test', '1', 'java.lang.NoSuchMethodException: com.suke.czx.modules.job.task.TestTask.test1(java.lang.String)', '1', '2018-06-01 23:00:00');
-INSERT INTO `schedule_job_log` VALUES ('5', '1', 'testTask', 'test1', 'test', '1', 'java.lang.NoSuchMethodException: com.suke.czx.modules.job.task.TestTask.test1(java.lang.String)', '1', '2018-06-02 11:00:00');
-INSERT INTO `schedule_job_log` VALUES ('6', '1', 'testTask', 'test1', 'test', '1', 'java.lang.NoSuchMethodException: com.suke.czx.modules.job.task.TestTask.test1(java.lang.String)', '2', '2018-06-02 11:30:00');
 
 -- ----------------------------
 -- Table structure for `sys_config`
@@ -442,41 +438,11 @@ CREATE TABLE `sys_log` (
   `ip` varchar(64) DEFAULT NULL COMMENT 'IP地址',
   `create_date` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COMMENT='系统日志';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='系统日志';
 
 -- ----------------------------
 -- Records of sys_log
 -- ----------------------------
-INSERT INTO `sys_log` VALUES ('1', 'admin', '保存菜单', 'com.suke.czx.modules.sys.controller.SysMenuController.save()', '{\"parentId\":0,\"parentName\":\"一级菜单\",\"name\":\"个人中心\",\"type\":0,\"icon\":\"fa fa-user\",\"orderNum\":1}', '5', '0:0:0:0:0:0:0:1', '2018-06-01 21:30:22');
-INSERT INTO `sys_log` VALUES ('2', 'admin', '保存菜单', 'com.suke.czx.modules.sys.controller.SysMenuController.save()', '{\"parentId\":0,\"parentName\":\"一级菜单\",\"name\":\"资产明细\",\"url\":\"modules/hluser/index.html\",\"perms\":\"hluser:index\",\"type\":1,\"icon\":\"fa fa-th-list\",\"orderNum\":0}', '6', '0:0:0:0:0:0:0:1', '2018-06-01 21:49:54');
-INSERT INTO `sys_log` VALUES ('3', 'admin', '修改菜单', 'com.suke.czx.modules.sys.controller.SysMenuController.update()', '{\"menuId\":32,\"parentId\":31,\"parentName\":\"个人中心\",\"name\":\"资产明细\",\"url\":\"modules/hluser/index.html\",\"perms\":\"hluser:index\",\"type\":1,\"icon\":\"fa fa-th-list\",\"orderNum\":0}', '7', '0:0:0:0:0:0:0:1', '2018-06-01 21:50:37');
-INSERT INTO `sys_log` VALUES ('4', 'admin', '修改菜单', 'com.suke.czx.modules.sys.controller.SysMenuController.update()', '{\"menuId\":31,\"parentId\":0,\"parentName\":\"一级菜单\",\"name\":\"主页\",\"type\":0,\"icon\":\"fa fa-user\",\"orderNum\":1}', '5', '0:0:0:0:0:0:0:1', '2018-06-01 22:03:17');
-INSERT INTO `sys_log` VALUES ('5', 'admin', '修改菜单', 'com.suke.czx.modules.sys.controller.SysMenuController.update()', '{\"menuId\":32,\"parentId\":31,\"parentName\":\"主页\",\"name\":\"个人主心\",\"url\":\"modules/hluser/index.html\",\"perms\":\"hluser:index\",\"type\":1,\"icon\":\"fa fa-th-list\",\"orderNum\":0}', '5', '0:0:0:0:0:0:0:1', '2018-06-01 22:03:32');
-INSERT INTO `sys_log` VALUES ('6', 'admin', '修改菜单', 'com.suke.czx.modules.sys.controller.SysMenuController.update()', '{\"menuId\":31,\"parentId\":0,\"parentName\":\"一级菜单\",\"name\":\"主页\",\"type\":0,\"icon\":\"fa fa-home\",\"orderNum\":1}', '4', '0:0:0:0:0:0:0:1', '2018-06-01 22:05:12');
-INSERT INTO `sys_log` VALUES ('7', 'admin', '修改菜单', 'com.suke.czx.modules.sys.controller.SysMenuController.update()', '{\"menuId\":32,\"parentId\":31,\"parentName\":\"主页\",\"name\":\"个人主心\",\"url\":\"modules/hluser/index.html\",\"perms\":\"hluser:index\",\"type\":1,\"icon\":\"fa fa-th-user\",\"orderNum\":0}', '5', '0:0:0:0:0:0:0:1', '2018-06-01 22:05:29');
-INSERT INTO `sys_log` VALUES ('8', 'admin', '修改菜单', 'com.suke.czx.modules.sys.controller.SysMenuController.update()', '{\"menuId\":32,\"parentId\":31,\"parentName\":\"主页\",\"name\":\"个人中心\",\"url\":\"modules/hluser/index.html\",\"perms\":\"hluser:index\",\"type\":1,\"icon\":\"fa fa-user\",\"orderNum\":0}', '5', '0:0:0:0:0:0:0:1', '2018-06-01 22:05:53');
-INSERT INTO `sys_log` VALUES ('9', 'admin', '保存菜单', 'com.suke.czx.modules.sys.controller.SysMenuController.save()', '{\"parentId\":31,\"parentName\":\"主页\",\"name\":\"汉语币购买\",\"url\":\"modules/hluser/purchase.html\",\"perms\":\"hluser:purchase\",\"type\":1,\"orderNum\":1}', '7', '0:0:0:0:0:0:0:1', '2018-06-01 22:24:26');
-INSERT INTO `sys_log` VALUES ('10', 'admin', '保存菜单', 'com.suke.czx.modules.sys.controller.SysMenuController.save()', '{\"parentId\":31,\"parentName\":\"主页\",\"name\":\"货币交易\",\"url\":\"modules/hluser/transaction.html\",\"perms\":\"hluser:transaction\",\"type\":1,\"icon\":\"fa fa-user-secret\",\"orderNum\":2}', '6', '0:0:0:0:0:0:0:1', '2018-06-01 22:31:32');
-INSERT INTO `sys_log` VALUES ('11', 'admin', '保存菜单', 'com.suke.czx.modules.sys.controller.SysMenuController.save()', '{\"parentId\":31,\"parentName\":\"主页\",\"name\":\"信息修改\",\"url\":\"modules/hluser/update.html\",\"perms\":\"hluser:update\",\"type\":1,\"icon\":\"fa fa-bug\",\"orderNum\":4}', '5', '0:0:0:0:0:0:0:1', '2018-06-01 22:38:32');
-INSERT INTO `sys_log` VALUES ('12', 'admin', '保存角色', 'com.suke.czx.modules.sys.controller.SysRoleController.save()', '{\"roleId\":1,\"roleName\":\"普通用户\",\"remark\":\"供普通会员使用\",\"createUserId\":1,\"menuIdList\":[31,32,33,34,35],\"createTime\":\"Jun 1, 2018 10:39:15 PM\"}', '87', '0:0:0:0:0:0:0:1', '2018-06-01 22:39:16');
-INSERT INTO `sys_log` VALUES ('13', 'admin', '保存菜单', 'com.suke.czx.modules.sys.controller.SysMenuController.save()', '{\"parentId\":0,\"parentName\":\"一级菜单\",\"name\":\"后台管理\",\"type\":0,\"icon\":\"fa fa-cog\",\"orderNum\":0}', '2', '0:0:0:0:0:0:0:1', '2018-06-01 22:40:29');
-INSERT INTO `sys_log` VALUES ('14', 'admin', '保存菜单', 'com.suke.czx.modules.sys.controller.SysMenuController.save()', '{\"parentId\":36,\"parentName\":\"后台管理\",\"name\":\"货币价格\",\"url\":\"modules/hladmin/price\",\"perms\":\"hladmin:price\",\"type\":1,\"icon\":\"fa fa-user-secret\",\"orderNum\":0}', '6', '0:0:0:0:0:0:0:1', '2018-06-01 22:42:20');
-INSERT INTO `sys_log` VALUES ('15', 'admin', '修改密码', 'com.suke.czx.modules.sys.controller.SysUserController.password()', '\"admin\"', '5', '0:0:0:0:0:0:0:1', '2018-06-01 22:45:19');
-INSERT INTO `sys_log` VALUES ('16', 'admin', '保存菜单', 'com.suke.czx.modules.sys.controller.SysMenuController.save()', '{\"parentId\":36,\"parentName\":\"后台管理\",\"name\":\"购买审批\",\"url\":\"modules/hladmin/audit\",\"perms\":\"hladmin:audit\",\"type\":1,\"icon\":\"fa fa-th-list\",\"orderNum\":1}', '6', '0:0:0:0:0:0:0:1', '2018-06-01 22:48:55');
-INSERT INTO `sys_log` VALUES ('17', 'admin', '删除定时任务', 'com.suke.czx.modules.job.controller.ScheduleJobController.delete()', '[2]', '24', '0:0:0:0:0:0:0:1', '2018-06-01 22:50:22');
-INSERT INTO `sys_log` VALUES ('18', 'admin', '修改菜单', 'com.suke.czx.modules.sys.controller.SysMenuController.update()', '{\"menuId\":37,\"parentId\":36,\"parentName\":\"后台管理\",\"name\":\"货币价格\",\"url\":\"modules/hladmin/price.html\",\"perms\":\"hladmin:price\",\"type\":1,\"icon\":\"fa fa-user-secret\",\"orderNum\":0}', '5', '0:0:0:0:0:0:0:1', '2018-06-01 22:52:29');
-INSERT INTO `sys_log` VALUES ('19', 'admin', '修改菜单', 'com.suke.czx.modules.sys.controller.SysMenuController.update()', '{\"menuId\":38,\"parentId\":36,\"parentName\":\"后台管理\",\"name\":\"购买审批\",\"url\":\"modules/hladmin/audit.html\",\"perms\":\"hladmin:audit\",\"type\":1,\"icon\":\"fa fa-th-list\",\"orderNum\":1}', '5', '0:0:0:0:0:0:0:1', '2018-06-01 22:52:40');
-INSERT INTO `sys_log` VALUES ('20', 'admin', '保存菜单', 'com.suke.czx.modules.sys.controller.SysMenuController.save()', '{\"parentId\":36,\"parentName\":\"后台管理\",\"name\":\"购买记录\",\"url\":\"modules/hladmin/purchase/detail.html\",\"perms\":\"hladmin:purchase:detail\",\"type\":1,\"orderNum\":3}', '5', '0:0:0:0:0:0:0:1', '2018-06-01 22:57:58');
-INSERT INTO `sys_log` VALUES ('21', 'admin', '修改菜单', 'com.suke.czx.modules.sys.controller.SysMenuController.update()', '{\"menuId\":38,\"parentId\":36,\"parentName\":\"后台管理\",\"name\":\"购买审批\",\"url\":\"modules/hladmin/audit.html\",\"perms\":\"hladmin:audit\",\"type\":1,\"icon\":\"fa fa-th-list\",\"orderNum\":1}', '4', '0:0:0:0:0:0:0:1', '2018-06-01 22:58:10');
-INSERT INTO `sys_log` VALUES ('22', 'admin', '修改菜单', 'com.suke.czx.modules.sys.controller.SysMenuController.update()', '{\"menuId\":39,\"parentId\":36,\"parentName\":\"后台管理\",\"name\":\"购买记录\",\"url\":\"modules/hladmin/purchase/detail.html\",\"perms\":\"hladmin:purchase:detail\",\"type\":1,\"icon\":\"fa fa-th-list\",\"orderNum\":3}', '5', '0:0:0:0:0:0:0:1', '2018-06-01 22:58:16');
-INSERT INTO `sys_log` VALUES ('23', 'admin', '修改菜单', 'com.suke.czx.modules.sys.controller.SysMenuController.update()', '{\"menuId\":39,\"parentId\":36,\"parentName\":\"后台管理\",\"name\":\"购买记录\",\"url\":\"modules/hladmin/purchase/detail.html\",\"perms\":\"hladmin:purchase:detail\",\"type\":1,\"icon\":\"fa fa-th-list\",\"orderNum\":2}', '4', '0:0:0:0:0:0:0:1', '2018-06-01 22:58:23');
-INSERT INTO `sys_log` VALUES ('24', 'admin', '修改菜单', 'com.suke.czx.modules.sys.controller.SysMenuController.update()', '{\"menuId\":39,\"parentId\":36,\"parentName\":\"后台管理\",\"name\":\"购买记录\",\"url\":\"modules/hladmin/purchase/detail.html\",\"perms\":\"hladmin:purchase:detail\",\"type\":1,\"icon\":\"fa fa-th-list\",\"orderNum\":2}', '6', '0:0:0:0:0:0:0:1', '2018-06-01 22:58:24');
-INSERT INTO `sys_log` VALUES ('25', 'admin', '修改菜单', 'com.suke.czx.modules.sys.controller.SysMenuController.update()', '{\"menuId\":39,\"parentId\":36,\"parentName\":\"后台管理\",\"name\":\"购买记录\",\"url\":\"modules/hladmin/purchase/detail.html\",\"perms\":\"hladmin:purchase:detail\",\"type\":1,\"icon\":\"fa fa-th-list\",\"orderNum\":2}', '5', '0:0:0:0:0:0:0:1', '2018-06-01 22:58:25');
-INSERT INTO `sys_log` VALUES ('26', 'admin', '修改菜单', 'com.suke.czx.modules.sys.controller.SysMenuController.update()', '{\"menuId\":39,\"parentId\":36,\"parentName\":\"后台管理\",\"name\":\"购买记录\",\"url\":\"modules/hladmin/purchase/detail.html\",\"perms\":\"hladmin:purchase:detail\",\"type\":1,\"icon\":\"fa fa-th-list\",\"orderNum\":2}', '4', '0:0:0:0:0:0:0:1', '2018-06-01 22:58:26');
-INSERT INTO `sys_log` VALUES ('27', 'admin', '保存角色', 'com.suke.czx.modules.sys.controller.SysRoleController.save()', '{\"roleId\":2,\"roleName\":\"管理员\",\"remark\":\"供公司内部人员使用\",\"createUserId\":1,\"menuIdList\":[36,37,38,39],\"createTime\":\"Jun 1, 2018 10:59:36 PM\"}', '19', '0:0:0:0:0:0:0:1', '2018-06-01 22:59:36');
-INSERT INTO `sys_log` VALUES ('28', 'admin', '保存用户', 'com.suke.czx.modules.sys.controller.SysUserController.save()', '{\"userId\":2,\"username\":\"admin1\",\"password\":\"aa2718d4132a5bf96586aefb7aaf0b94b18867e78aaa9ea57dc0fc772f1867cd\",\"salt\":\"nhmjRCT0rT1ctQep8O23\",\"email\":\"859844773@qq.com\",\"mobile\":\"15888888888\",\"status\":1,\"roleIdList\":[2],\"createUserId\":1,\"createTime\":\"Jun 1, 2018 11:06:59 PM\"}', '65', '0:0:0:0:0:0:0:1', '2018-06-01 23:06:59');
-INSERT INTO `sys_log` VALUES ('29', 'admin', '修改用户', 'com.suke.czx.modules.sys.controller.SysUserController.update()', '{\"userId\":2,\"username\":\"admin1\",\"name\":\"lzg\",\"password\":\"aa2718d4132a5bf96586aefb7aaf0b94b18867e78aaa9ea57dc0fc772f1867cd\",\"salt\":\"nhmjRCT0rT1ctQep8O23\",\"email\":\"859844773@qq.com\",\"mobile\":\"15888888888\",\"status\":1,\"roleIdList\":[2],\"createUserId\":1,\"createTime\":\"Jun 1, 2018 11:06:59 PM\"}', '5702', '0:0:0:0:0:0:0:1', '2018-06-02 11:53:21');
-INSERT INTO `sys_log` VALUES ('30', 'admin', '暂停定时任务', 'com.suke.czx.modules.job.controller.ScheduleJobController.pause()', '[1]', '12', '0:0:0:0:0:0:0:1', '2018-06-02 11:53:43');
 
 -- ----------------------------
 -- Table structure for `sys_menu`
@@ -527,14 +493,14 @@ INSERT INTO `sys_menu` VALUES ('27', '1', '参数管理', 'modules/sys/config.ht
 INSERT INTO `sys_menu` VALUES ('29', '1', '系统日志', 'modules/sys/log.html', 'sys:log:list', '1', 'fa fa-file-text-o', '7');
 INSERT INTO `sys_menu` VALUES ('30', '1', '文件上传', 'modules/oss/oss.html', 'sys:oss:all', '1', 'fa fa-file-image-o', '6');
 INSERT INTO `sys_menu` VALUES ('31', '0', '主页', null, null, '0', 'fa fa-home', '1');
-INSERT INTO `sys_menu` VALUES ('32', '31', '个人中心', 'modules/hluser/index.html', 'hluser:index', '1', 'fa fa-user', '0');
-INSERT INTO `sys_menu` VALUES ('33', '31', '汉语币购买', 'modules/hluser/purchase.html', 'hluser:purchase', '1', null, '1');
-INSERT INTO `sys_menu` VALUES ('34', '31', '货币交易', 'modules/hluser/transaction.html', 'hluser:transaction', '1', 'fa fa-user-secret', '2');
-INSERT INTO `sys_menu` VALUES ('35', '31', '信息修改', 'modules/hluser/update.html', 'hluser:update', '1', 'fa fa-bug', '4');
+INSERT INTO `sys_menu` VALUES ('32', '31', '个人中心', 'modules/hluser/hluser.html', 'hluser:index', '1', 'fa fa-user', '0');
+INSERT INTO `sys_menu` VALUES ('33', '31', '汉语币购买', 'modules/hladmin/hlpurchase.html', 'hladmin:hlpurchase:list', '1', null, '1');
+INSERT INTO `sys_menu` VALUES ('34', '31', '货币交易', 'modules/hladmin/hltransaction.html', 'hluser:transaction', '1', 'fa fa-user-secret', '2');
+INSERT INTO `sys_menu` VALUES ('35', '31', '信息修改', 'modules/hluser/hluserinfo.html', 'hluser:update', '1', 'fa fa-bug', '4');
 INSERT INTO `sys_menu` VALUES ('36', '0', '后台管理', null, null, '0', 'fa fa-cog', '0');
-INSERT INTO `sys_menu` VALUES ('37', '36', '货币价格', 'modules/hladmin/price.html', 'hladmin:price', '1', 'fa fa-user-secret', '0');
+INSERT INTO `sys_menu` VALUES ('37', '36', '货币价格', 'modules/hladmin/hlhylprice.html', 'hladmin:price', '1', 'fa fa-user-secret', '0');
 INSERT INTO `sys_menu` VALUES ('38', '36', '购买审批', 'modules/hladmin/audit.html', 'hladmin:audit', '1', 'fa fa-th-list', '1');
-INSERT INTO `sys_menu` VALUES ('39', '36', '购买记录', 'modules/hladmin/purchase/detail.html', 'hladmin:purchase:detail', '1', 'fa fa-th-list', '2');
+INSERT INTO `sys_menu` VALUES ('39', '36', '生成奖金', 'modules/hladmin/hlreward.html', 'hladmin:reward', '1', 'fa fa-sun-o', '2');
 
 -- ----------------------------
 -- Table structure for `sys_oss`
@@ -579,7 +545,7 @@ CREATE TABLE `sys_role_menu` (
   `role_id` bigint(20) DEFAULT NULL COMMENT '角色ID',
   `menu_id` bigint(20) DEFAULT NULL COMMENT '菜单ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='角色与菜单对应关系';
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='角色与菜单对应关系';
 
 -- ----------------------------
 -- Records of sys_role_menu
@@ -589,10 +555,10 @@ INSERT INTO `sys_role_menu` VALUES ('2', '1', '32');
 INSERT INTO `sys_role_menu` VALUES ('3', '1', '33');
 INSERT INTO `sys_role_menu` VALUES ('4', '1', '34');
 INSERT INTO `sys_role_menu` VALUES ('5', '1', '35');
-INSERT INTO `sys_role_menu` VALUES ('6', '2', '36');
-INSERT INTO `sys_role_menu` VALUES ('7', '2', '37');
-INSERT INTO `sys_role_menu` VALUES ('8', '2', '38');
-INSERT INTO `sys_role_menu` VALUES ('9', '2', '39');
+INSERT INTO `sys_role_menu` VALUES ('9', '2', '36');
+INSERT INTO `sys_role_menu` VALUES ('10', '2', '37');
+INSERT INTO `sys_role_menu` VALUES ('11', '2', '38');
+INSERT INTO `sys_role_menu` VALUES ('12', '2', '39');
 
 -- ----------------------------
 -- Table structure for `sys_user`
@@ -611,7 +577,7 @@ CREATE TABLE `sys_user` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='系统用户';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='系统用户';
 
 -- ----------------------------
 -- Records of sys_user
@@ -628,7 +594,7 @@ CREATE TABLE `sys_user_role` (
   `user_id` bigint(20) DEFAULT NULL COMMENT '用户ID',
   `role_id` bigint(20) DEFAULT NULL COMMENT '角色ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='用户与角色对应关系';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户与角色对应关系';
 
 -- ----------------------------
 -- Records of sys_user_role
@@ -651,8 +617,8 @@ CREATE TABLE `sys_user_token` (
 -- ----------------------------
 -- Records of sys_user_token
 -- ----------------------------
-INSERT INTO `sys_user_token` VALUES ('1', '65cf6e4114284b9e5cc068f068167ae5', '2018-06-02 23:48:18', '2018-06-02 11:48:18');
-INSERT INTO `sys_user_token` VALUES ('2', '7cca05d11a76715fdf91fb83bed80676', '2018-06-02 11:07:37', '2018-06-01 23:07:37');
+INSERT INTO `sys_user_token` VALUES ('1', 'f416607af71782155c50f784d90771ee', '2018-06-06 09:28:14', '2018-06-05 21:28:14');
+INSERT INTO `sys_user_token` VALUES ('2', '26dc48edf5ab57375f0163837724853e', '2018-06-06 09:30:53', '2018-06-05 21:30:53');
 
 -- ----------------------------
 -- Table structure for `tb_app_update`

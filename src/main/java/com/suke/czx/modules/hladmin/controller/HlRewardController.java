@@ -90,9 +90,9 @@ public class HlRewardController {
 	@RequestMapping("/generate")
 	public R generate() {
 		int count = hlRewardService.isGenerate(DateUtil.newIsoDateFormat().format(new Date()));
-//		if (count > 0) {
-//			return R.error("当时奖金已生成");
-//		}
+		if (count > 0) {
+			return R.error("今天奖金已生成");
+		}
 		hlRewardService.generate();
 		return R.ok();
 	}
