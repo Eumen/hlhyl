@@ -1,14 +1,17 @@
 package com.suke.czx.modules.sys.controller;
 
-import com.google.code.kaptcha.Constants;
-import com.google.code.kaptcha.Producer;
-import com.suke.czx.common.utils.R;
-import com.suke.czx.common.utils.ShiroUtils;
-import com.suke.czx.modules.sys.entity.HlUserEntity;
-import com.suke.czx.modules.sys.entity.SysUserEntity;
-import com.suke.czx.modules.sys.service.HlUserService;
-import com.suke.czx.modules.sys.service.SysUserService;
-import com.suke.czx.modules.sys.service.SysUserTokenService;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.imageio.ImageIO;
+import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +19,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.imageio.ImageIO;
-import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Map;
+import com.google.code.kaptcha.Constants;
+import com.google.code.kaptcha.Producer;
+import com.suke.czx.common.exception.RRException;
+import com.suke.czx.common.utils.R;
+import com.suke.czx.common.utils.ShiroUtils;
+import com.suke.czx.modules.sys.entity.HlUserEntity;
+import com.suke.czx.modules.sys.entity.SysUserEntity;
+import com.suke.czx.modules.sys.service.HlUserService;
+import com.suke.czx.modules.sys.service.SysUserService;
+import com.suke.czx.modules.sys.service.SysUserTokenService;
 
 /**
  * 登录相关
@@ -101,6 +107,13 @@ public class SysLoginController extends AbstractController {
 		entity.setTel(entity.getUserName());
 		entity.setAmount(0d);
 		entity.setLockAmount(0d);
+		
+		Map<String, Object> recMap = new HashMap<String, Object>();
+		recMap.put("userName", entity.getRecUser());
+		List<HlUserEntity> recList = hlUserService.queryList(recMap);
+		if(CollectionUtils.isEmpty(recList)){
+			throw new RRException("推荐人不存在");
+		}
 		// 生成token，并保存到数据库
 		hlUserService.save(entity);
 		return R.ok();

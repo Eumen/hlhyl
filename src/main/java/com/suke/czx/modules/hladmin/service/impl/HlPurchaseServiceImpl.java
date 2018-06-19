@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,7 +83,7 @@ public class HlPurchaseServiceImpl implements HlPurchaseService {
 			Map<String, String> recMap = new HashMap<String, String>();
 			recMap.put("userName", userList.get(0).getRecUser());
 			List<HlUserEntity> recUserList = hlUserDao.queryList(recMap);
-			if (!StringUtils.isEmpty(recUserList)) {
+			if (!CollectionUtils.isEmpty(recUserList)) {
 				
 				HlUserEntity recUser = recUserList.get(0);
 				if (recUserList.get(0).getLockAmount() > 0) {

@@ -1,5 +1,6 @@
 package com.suke.czx.modules.hladmin.service.impl;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -62,6 +63,7 @@ public class HlRewardServiceImpl implements HlRewardService {
 	@Override
 	@Transactional
 	public void generate() {
+		DecimalFormat df = new DecimalFormat("#.00");
 		List<HlUserEntity> listUser = hlUserDao.queryList(null);
 		listUser.stream().filter(user -> user.getLockAmount() > 0.0).forEach(user -> {
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -74,7 +76,7 @@ public class HlRewardServiceImpl implements HlRewardService {
 				hlUserDao.update(user);
 			} else {
 				double award = user.getLockAmount() * RangeUtils.lockRange(user.getLockAmount());
-				user.setAmount(user.getAmount() + award);
+				user.setAmount(user.getAmount() + Double.valueOf(df.format(award)));
 				hlUserDao.update(user);
 
 				HlRewardEntity hre = new HlRewardEntity();
