@@ -56,7 +56,9 @@ var vm = new Vue({
 			lockAmount : '',
 			recUser : '',
 			willLockAmount : ''
-		}
+		},
+		recLink: null,
+		imgUrl: null
 	},
 	methods: {
 		query: function () {
@@ -122,4 +124,8 @@ var vm = new Vue({
 var url = "/sys/hluser/list";
 $.get(url, function(r){
     vm.hlUser = r.hlUser;
+    vm.recLink = "www.hl518.top:88/register.html?userName=" + r.hlUser.userName;
+    var qrcode= $('#qrDiv').qrcode(vm.recLink).hide();   
+    var canvas=qrcode.find('canvas').get(0);  
+	$('#imagQrDiv').attr('src',canvas.toDataURL('image/png')) ; 
 });

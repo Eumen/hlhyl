@@ -56,6 +56,7 @@ public class HlUserController extends AbstractController {
 			map.put("amount", userList.get(0).getAmount());
 			map.put("lockAmount", userList.get(0).getLockAmount());
 			map.put("recUser", userList.get(0).getRecUser());
+			map.put("userName", this.getUser().getUsername());
 			Map<String, Object> mapReward = new HashMap<String, Object>();
 			mapReward.put("userName", userList.get(0).getUserName());
 			double recreward = hlRewardService.queryList(mapReward).stream().filter(award -> award.getAwardType() == 2)

@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="../../plugins/ztree/css/metroStyle/metroStyle.css">
 <link rel="stylesheet" href="../../css/main.css">
 <script src="../../libs/jquery.min.js"></script>
+<script src="../../libs/jquery.qrcode.min.js"></script>
 <script src="../../plugins/layer/layer.js"></script>
 <script src="../../libs/bootstrap.min.js"></script>
 <script src="../../libs/vue.min.js"></script>
@@ -67,6 +68,7 @@
 			<div class="form-group">
 				<div class="col-sm-2 control-label"></div> 
 				<input type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myModal" value="我要锁仓"/>
+				<input type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myRecModal" value="我要推广"/>
 			</div>
 		</form>
 	</div>
@@ -90,6 +92,33 @@
 				</button>
 				<button type="button" class="btn btn-primary" @click="lockAmount">
 					提交
+				</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+	</div>
+	<div class="modal fade" id="myRecModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myModalLabel">
+					我的链接
+				</h4>
+			</div>
+			<div class="modal-body">
+				<input type="text" class="form-control" v-model="recLink" disabled/>
+			</div>
+			<div class="modal-header">
+				<h4 class="modal-title" id="myModalLabel">
+					二维码推广
+				</h4>
+			</div>
+			<div class="modal-body">
+				<div id="qrDiv"></div>  
+				<img id="imagQrDiv" src=""/>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭
 				</button>
 			</div>
 		</div><!-- /.modal-content -->
