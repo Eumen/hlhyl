@@ -9,9 +9,7 @@
 	<select id="queryList" resultType="com.suke.czx.modules.sys.entity.SysUserEntity">
 		select * from sys_user 
 		<where>
-			<if test="createUserId != null">
-				and `create_user_id` = #{createUserId} 
-			</if>
+			username not like 'admin%'
 			<if test="username != null and username.trim() != ''">
 				and `username` like concat('%',#{username},'%') 
 			</if>
@@ -32,9 +30,7 @@
 	<select id="queryTotal" resultType="int">
 		select count(*) from sys_user
 		<where>
-			<if test="createUserId != null">
-				and `create_user_id` = #{createUserId} 
-			</if>
+			username not like 'admin%'
 			<if test="username != null and username.trim() != ''">
 				and `username` like concat('%',#{username},'%') 
 			</if>
@@ -94,15 +90,12 @@
 		<set> 
 			<if test="username != null">`username` = #{username}, </if>
 			<if test="password != null">`password` = #{password}, </if>
-			<if test="password != null">`name` = #{name}, </if>
+			<if test="name != null">`name` = #{name}, </if>
 			<if test="email != null">`email` = #{email}, </if>
 			<if test="mobile != null">`mobile` = #{mobile}, </if>
 			<if test="status != null">`status` = #{status}, </if>
 		</set>
 		where user_id = #{userId} 
-		<if test="createUserId != null">
-			and `create_user_id` = #{createUserId} 
-		</if>
 	</update>
 	
 	<update id="updatePassword" parameterType="map">
