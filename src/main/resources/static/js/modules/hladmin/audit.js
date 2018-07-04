@@ -113,7 +113,14 @@ var vm = new Vue({
 			if(ids == null){
 				return ;
 			}
-			
+			for(var i = 0; i < ids.length; i++){
+				var celldata = jQuery("#jqGrid").jqGrid('getCell',ids[i],6);
+				if (celldata == '已购买') {
+					alert("已购买的货币不允许删除");
+					return;
+				}
+			}
+			debugger
 			confirm('确定要删除选中的记录？', function(){
 				$.ajax({
 					type: "POST",

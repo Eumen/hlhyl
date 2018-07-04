@@ -104,7 +104,6 @@ public class SysLoginController extends AbstractController {
 	@RequestMapping(value = "/sys/register", method = RequestMethod.POST)
 	public Map<String, Object> register(HlUserEntity entity) throws IOException {
 		entity.getUserName();
-		entity.setTel(entity.getUserName());
 		entity.setAmount(0d);
 		entity.setLockAmount(0d);
 		

@@ -32,7 +32,7 @@
         <h4 style="margin-bottom: 0px;"><i class="fa fa-exclamation-circle"></i> {{errorMsg}}</h4>
       </div>
       <div class="form-group has-feedback">
-          <input type="text" class="form-control" v-model="userName" placeholder="手机号码">
+          <input type="text" class="form-control" v-model="userName" placeholder="用户名">
           <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
@@ -44,11 +44,15 @@
           <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-          <input type="text" class="form-control" v-model="name" placeholder="姓名">
+          <input type="text" class="form-control" v-model="name" placeholder="真实姓名">
           <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
           <input type="text" class="form-control" v-model="idCard" placeholder="身份证号">
+          <span class="glyphicon glyphicon-user form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+          <input type="text" class="form-control" v-model="tel" placeholder="电话号码">
           <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
@@ -97,6 +101,7 @@
             idCard: '',
             bankName: '',
             bankNo: '',
+            tel: '',
             recUser: T.p('userName'),
             error: false,
             errorMsg: ''
@@ -109,7 +114,7 @@
         methods: {
             login: function () {
                 var data = "userName="+vm.userName+"&password="+vm.password+"&name="+vm.name+"&idCard="+
-                			vm.idCard+"&bankName="+vm.bankName+"&bankNo="+vm.bankNo+"&recUser="+vm.recUser;
+                			vm.idCard+"&bankName="+vm.bankName+"&bankNo="+vm.bankNo+"&recUser="+vm.recUser + "&tel="+vm.tel;
                 if(vm.validator()){
                     return false;
                 }
@@ -137,7 +142,7 @@
             validator: function () {
                 if(isBlank(vm.userName)){
                 	vm.error = true;
-                    vm.errorMsg = "手机号码不能为空";
+                    vm.errorMsg = "用户名不能为空";
                     return true;
                 }
                 if(isBlank(vm.name)){
@@ -167,6 +172,11 @@
                 if(isBlank(vm.bankNo)){
                 	vm.error = true;
                     vm.errorMsg = "开户银行卡号不能为空";
+                    return true;
+                }
+                if(isBlank(vm.tel)){
+                	vm.error = true;
+                    vm.errorMsg = "电话号不能为空";
                     return true;
                 }
                 if(isBlank(vm.recUser)){
