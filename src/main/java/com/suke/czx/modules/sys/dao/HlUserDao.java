@@ -1,8 +1,10 @@
 package com.suke.czx.modules.sys.dao;
 
-import com.suke.czx.modules.sys.entity.HlUserEntity;
-import com.suke.czx.modules.sys.dao.BaseDao;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
+
+import com.suke.czx.modules.sys.entity.HlUserEntity;
 
 /**
  * 
@@ -13,5 +15,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface HlUserDao extends BaseDao<HlUserEntity> {
-	
+	List<HlUserEntity> queryAll();
 }

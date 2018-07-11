@@ -23,12 +23,16 @@
 	<select id="queryObject" resultType="com.suke.czx.modules.sys.entity.HlUserEntity">
 		select * from hl_user where id = #{value}
 	</select>
+	
+	<select id="queryAll" resultType="com.suke.czx.modules.sys.entity.HlUserEntity">
+		select * from hl_user
+	</select>
 
 	<select id="queryList" resultType="com.suke.czx.modules.sys.entity.HlUserEntity">
 		select * from hl_user
 		<where>
-			<if test="userName != null">
-				and `user_name` = #{userName} 
+			<if test="userName != null and userName.trim() != ''">
+				and `user_name` like concat('%',#{userName},'%') 
 			</if>
 			<if test="name != null">
 				and `name` = #{name} 

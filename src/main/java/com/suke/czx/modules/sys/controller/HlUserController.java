@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.suke.czx.common.utils.PageUtils;
+import com.suke.czx.common.utils.Query;
 import com.suke.czx.common.utils.R;
 import com.suke.czx.modules.hladmin.entity.HlRewardEntity;
 import com.suke.czx.modules.hladmin.service.HlHylPriceService;
@@ -63,6 +65,22 @@ public class HlUserController extends AbstractController {
 		}
 
 		return R.ok().put("hlUser", map);
+	}
+
+	/**
+	 * 列表
+	 */
+	@RequestMapping("/listAll")
+	public R listAll(@RequestParam Map<String, Object> params) {
+		// 查询列表数据
+		Query query = new Query(params);
+
+		List<HlUserEntity> hlUserList = hlUserService.queryList(query);
+		int total = hlUserService.queryTotal(query);
+
+		PageUtils pageUtil = new PageUtils(hlUserList, total, query.getLimit(), query.getPage());
+
+		return R.ok().put("page", pageUtil);
 	}
 
 	/**
@@ -124,12 +142,24 @@ public class HlUserController extends AbstractController {
 		return R.ok();
 	}
 
+	@RequestMapping("/password/{userId}")
+	public R password(@PathVariable("userId") int userId) {
+		hlUserService.password(userId);
+		return R.ok();
+	}
+
 	/**
 	 * 删除
 	 */
 	@RequestMapping("/delete")
 	public R delete(@RequestBody Integer[] ids) {
 		hlUserService.deleteBatch(ids);
+
+		return R.ok();
+	}
+
+	@RequestMapping("/getAllUserMap/{userName}")
+	public R getAllUserMap(@PathVariable("userName") String userName) {
 
 		return R.ok();
 	}

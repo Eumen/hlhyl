@@ -1,18 +1,21 @@
 $(function () {
     $("#jqGrid").jqGrid({
-        url: baseURL + 'sys/user/list',
+        url: '/sys/hluser/listAll',
         datatype: "json",
         colModel: [			
-			{ label: '用户ID', name: 'userId', index: "user_id", width: 45, key: true },
-			{ label: '用户名', name: 'username', width: 75 },
-			{ label: '姓名', name: 'name', width: 75 },
-			{ label: '手机号', name: 'mobile', width: 100 },
-			{ label: '状态', name: 'status', width: 80, formatter: function(value, options, row){
-				return value === 0 ? 
-					'<span class="label label-danger">禁用</span>' : 
-					'<span class="label label-success">正常</span>';
-			}},
-			{ label: '创建时间', name: 'createTime', index: "create_time", width: 80}
+			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
+			{ label: '用户账户', name: 'userName', index: 'user_name', width: 80 }, 			
+			{ label: '姓名', name: 'name', index: 'name', width: 80 }, 			
+			{ label: '身份证', name: 'idCard', index: 'id_card', width: 80 }, 			
+			{ label: '电话', name: 'tel', index: 'tel', width: 80 }, 			
+			{ label: '开户银行', name: 'bankName', index: 'bank_name', width: 80 }, 			
+			{ label: '银行卡号', name: 'bankNo', index: 'bank_no', width: 80 }, 			
+			{ label: '流通货币数量', name: 'amount', index: 'amount', width: 80 }, 			
+			{ label: '锁仓数量', name: 'lockAmount', index: 'lock_amount', width: 80 }, 			
+			{ label: '推荐人账号', name: 'recUser', index: 'rec_user', width: 80 }, 			
+			{ label: '推荐人姓名', name: 'recName', index: 'rec_name', width: 80 }, 			
+			{ label: '注册日期', name: 'registerDate', index: 'register_date', width: 80 }, 			
+			{ label: '', name: 'comment', index: 'comment', width: 80 }			
         ],
 		viewrecords: true,
         height: 385,
@@ -44,16 +47,9 @@ $(function () {
 var vm = new Vue({
 	el:'#rrapp',
 	data:{
-		q:{
-			username: null
-		},
 		showList: true,
-		title:null,
-		roleList:{},
-		user:{
-			status:1,
-			roleIdList:[]
-		}
+		title: null,
+		hlUser: {userName:null},
 	},
 	methods: {
 		query: function () {
@@ -62,63 +58,28 @@ var vm = new Vue({
 		add: function(){
 			vm.showList = false;
 			vm.title = "新增";
-			vm.roleList = {};
-			vm.user = {status:1,roleIdList:[]};
-			
-			//获取角色信息
-//			this.getRoleList();
+			vm.hlUser = {};
 		},
-		update: function () {
-			var userId = getSelectedRow();
-			if(userId == null){
+		update: function (event) {
+			var id = getSelectedRow();
+			if(id == null){
 				return ;
 			}
-			
 			vm.showList = false;
             vm.title = "修改";
-			
-			vm.getUser(userId);
-			//获取角色信息
-//			this.getRoleList();
+            
+            vm.getInfo(id)
 		},
-		del: function () {
-			var userIds = getSelectedRows();
-			if(userIds == null){
-				return ;
-			}
-			
-			confirm('确定要删除选中的记录？', function(){
-				$.ajax({
-					type: "POST",
-				    url: baseURL + "sys/user/delete",
-                    contentType: "application/json",
-				    data: JSON.stringify(userIds),
-				    success: function(r){
-						if(r.code == 0){
-							alert('操作成功', function(){
-                                vm.reload();
-							});
-						}else{
-							alert(r.msg);
-						}
-					}
-				});
-			});
-		},
-		saveOrUpdate: function () {
-            if(vm.validator()){
-                return ;
-            }
-
-			var url = vm.user.userId == null ? "sys/user/save" : "sys/user/update";
+		saveOrUpdate: function (event) {
+			var url = vm.hlUser.id == null ? "/sys/hluser/save" : "/sys/hluser/update";
 			$.ajax({
 				type: "POST",
-			    url: baseURL + url,
+			    url: url,
                 contentType: "application/json",
-			    data: JSON.stringify(vm.user),
+			    data: JSON.stringify(vm.hlUser),
 			    success: function(r){
 			    	if(r.code === 0){
-						alert('操作成功', function(){
+						alert('操作成功', function(index){
 							vm.reload();
 						});
 					}else{
@@ -127,40 +88,58 @@ var vm = new Vue({
 				}
 			});
 		},
-		getUser: function(userId){
-			$.get(baseURL + "sys/user/info/"+userId, function(r){
-				vm.user = r.user;
-				vm.user.password = null;
+		del: function (event) {
+			var ids = getSelectedRows();
+			if(ids == null){
+				return ;
+			}
+			
+			confirm('确定要删除选中的记录？', function(){
+				$.ajax({
+					type: "POST",
+				    url: "/sys/hluser/delete",
+                    contentType: "application/json",
+				    data: JSON.stringify(ids),
+				    success: function(r){
+						if(r.code == 0){
+							alert('操作成功', function(index){
+								$("#jqGrid").trigger("reloadGrid");
+							});
+						}else{
+							alert(r.msg);
+						}
+					}
+				});
 			});
 		},
-		getRoleList: function(){
-			$.get(baseURL + "sys/role/select", function(r){
-				vm.roleList = r.list;
+		getInfo: function(id){
+			$.get("/sys/hluser/info/"+id, function(r){
+                vm.hlUser = r.hlUser;
+            });
+		},
+		resetPassword: function(id){
+			var userId = getSelectedRow();
+			if(userId == null){
+				return ;
+			}
+			confirm('该操作将用户密码重置为（112233）？', function(){
+				$.get("/sys/hluser/password/"+userId, function(r){
+					if(r.code == 0){
+						alert('操作成功，用户新密码为112233');
+					}else{
+						alert(r.msg);
+					}
+	            });
 			});
 		},
-		reload: function () {
+		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
 			$("#jqGrid").jqGrid('setGridParam',{ 
-                postData:{'username': vm.q.username},
+				postData:{'userName': vm.hlUser.userName},
                 page:page
             }).trigger("reloadGrid");
-		},
-        validator: function () {
-            if(isBlank(vm.user.username)){
-                alert("用户名不能为空");
-                return true;
-            }
-            if(isBlank(vm.user.name)){
-            	alert("姓名不能为空");
-            	return true;
-            }
-
-            if(vm.user.userId == null && isBlank(vm.user.password)){
-                alert("密码不能为空");
-                return true;
-            }
-
-        }
+		}
 	}
 });
+

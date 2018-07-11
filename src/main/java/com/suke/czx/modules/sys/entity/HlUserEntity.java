@@ -45,7 +45,7 @@ public class HlUserEntity implements Serializable {
 	/**
 	 * 设置：会员信息表
 	 */
-	public void setId(Integer id) {
+	public void setId(final Integer id) {
 		this.id = id;
 	}
 
@@ -53,13 +53,13 @@ public class HlUserEntity implements Serializable {
 	 * 获取：会员信息表
 	 */
 	public Integer getId() {
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * 设置：
 	 */
-	public void setUserName(String userName) {
+	public void setUserName(final String userName) {
 		this.userName = userName;
 	}
 
@@ -67,21 +67,21 @@ public class HlUserEntity implements Serializable {
 	 * 获取：
 	 */
 	public String getUserName() {
-		return userName;
+		return this.userName;
 	}
 
 	public String getPassword() {
-		return password;
+		return this.password;
 	}
 
-	public void setPassword(String password) {
+	public void setPassword(final String password) {
 		this.password = password;
 	}
 
 	/**
 	 * 设置：
 	 */
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -89,13 +89,13 @@ public class HlUserEntity implements Serializable {
 	 * 获取：
 	 */
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	/**
 	 * 设置：
 	 */
-	public void setIdCard(String idCard) {
+	public void setIdCard(final String idCard) {
 		this.idCard = idCard;
 	}
 
@@ -103,13 +103,13 @@ public class HlUserEntity implements Serializable {
 	 * 获取：
 	 */
 	public String getIdCard() {
-		return idCard;
+		return this.idCard;
 	}
 
 	/**
 	 * 设置：
 	 */
-	public void setTel(String tel) {
+	public void setTel(final String tel) {
 		this.tel = tel;
 	}
 
@@ -117,13 +117,13 @@ public class HlUserEntity implements Serializable {
 	 * 获取：
 	 */
 	public String getTel() {
-		return tel;
+		return this.tel;
 	}
 
 	/**
 	 * 设置：
 	 */
-	public void setBankName(String bankName) {
+	public void setBankName(final String bankName) {
 		this.bankName = bankName;
 	}
 
@@ -131,13 +131,13 @@ public class HlUserEntity implements Serializable {
 	 * 获取：
 	 */
 	public String getBankName() {
-		return bankName;
+		return this.bankName;
 	}
 
 	/**
 	 * 设置：
 	 */
-	public void setBankNo(String bankNo) {
+	public void setBankNo(final String bankNo) {
 		this.bankNo = bankNo;
 	}
 
@@ -145,13 +145,13 @@ public class HlUserEntity implements Serializable {
 	 * 获取：
 	 */
 	public String getBankNo() {
-		return bankNo;
+		return this.bankNo;
 	}
 
 	/**
 	 * 设置：流通货币数量
 	 */
-	public void setAmount(Double amount) {
+	public void setAmount(final Double amount) {
 		this.amount = amount;
 	}
 
@@ -159,13 +159,13 @@ public class HlUserEntity implements Serializable {
 	 * 获取：流通货币数量
 	 */
 	public Double getAmount() {
-		return amount;
+		return this.amount;
 	}
 
 	/**
 	 * 设置：锁仓数量
 	 */
-	public void setLockAmount(Double lockAmount) {
+	public void setLockAmount(final Double lockAmount) {
 		this.lockAmount = lockAmount;
 	}
 
@@ -173,13 +173,13 @@ public class HlUserEntity implements Serializable {
 	 * 获取：锁仓数量
 	 */
 	public Double getLockAmount() {
-		return lockAmount;
+		return this.lockAmount;
 	}
 
 	/**
 	 * 设置：推荐人账号
 	 */
-	public void setRecUser(String recUser) {
+	public void setRecUser(final String recUser) {
 		this.recUser = recUser;
 	}
 
@@ -187,13 +187,13 @@ public class HlUserEntity implements Serializable {
 	 * 获取：推荐人账号
 	 */
 	public String getRecUser() {
-		return recUser;
+		return this.recUser;
 	}
 
 	/**
 	 * 设置：推荐人姓名
 	 */
-	public void setRecName(String recName) {
+	public void setRecName(final String recName) {
 		this.recName = recName;
 	}
 
@@ -201,13 +201,13 @@ public class HlUserEntity implements Serializable {
 	 * 获取：推荐人姓名
 	 */
 	public String getRecName() {
-		return recName;
+		return this.recName;
 	}
 
 	/**
 	 * 设置：
 	 */
-	public void setRegisterDate(Date registerDate) {
+	public void setRegisterDate(final Date registerDate) {
 		this.registerDate = registerDate;
 	}
 
@@ -215,13 +215,13 @@ public class HlUserEntity implements Serializable {
 	 * 获取：
 	 */
 	public Date getRegisterDate() {
-		return registerDate;
+		return this.registerDate;
 	}
 
 	/**
 	 * 设置：
 	 */
-	public void setComment(String comment) {
+	public void setComment(final String comment) {
 		this.comment = comment;
 	}
 
@@ -229,6 +229,6 @@ public class HlUserEntity implements Serializable {
 	 * 获取：
 	 */
 	public String getComment() {
-		return comment;
+		return this.comment;
 	}
 }
