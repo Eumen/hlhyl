@@ -6,12 +6,15 @@ import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.druid.util.StringUtils;
+import com.suke.czx.common.entity.Nodes;
 import com.suke.czx.common.utils.PageUtils;
 import com.suke.czx.common.utils.Query;
 import com.suke.czx.common.utils.R;
@@ -158,10 +161,17 @@ public class HlUserController extends AbstractController {
 		return R.ok();
 	}
 
-	@RequestMapping("/getAllUserMap/{userName}")
-	public R getAllUserMap(@PathVariable("userName") String userName) {
-
-		return R.ok();
+	@RequestMapping("/getAllUserMap")
+	public R getAllUserMap(@RequestParam("userName") String userName) {
+		if(userName.equals("admin1")){
+			return R.error("不允许查询管理员信息");
+		}
+		if (StringUtils.isEmpty(userName)){
+			userName = this.getUser().getUsername();
+		}
+		
+		Nodes nodes = hlUserService.getAllUserMap(userName);
+		return R.ok().put("nodes", nodes);
 	}
 
 }

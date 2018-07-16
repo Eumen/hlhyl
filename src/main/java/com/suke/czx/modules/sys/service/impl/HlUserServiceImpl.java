@@ -7,10 +7,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.suke.czx.common.entity.Nodes;
 import com.suke.czx.common.exception.RRException;
@@ -105,11 +109,36 @@ public class HlUserServiceImpl implements HlUserService {
 		List<HlUserEntity> allUser = this.hlUserDao.queryAll();
 		Nodes nodes = new Nodes();
 		nodes.setUserNode(this.getUserByUserName(allUser, userName));
-		return null;
+		this.buildChildren(allUser, nodes.getUserNode().getUserName(), nodes);
+		return nodes;
 	}
 
 	private HlUserEntity getUserByUserName(List<HlUserEntity> allUser, String userName) {
-		return allUser.stream().filter(user -> user.getUserName().equals(userName)).findFirst().get();
+		Optional<HlUserEntity> stream = allUser.stream().filter(user -> user.getUserName().equals(userName)).findFirst();
+		if(!stream.isPresent()){
+			throw new RRException("用户不存在");
+		}
+		return stream.get();
+	}
+
+	private boolean hasChild(List<HlUserEntity> allUser, String userName) {
+		return allUser.stream().filter(user -> user.getRecUser().equals(userName)).count() > 0 ? true : false;
+	}
+	
+	private List<HlUserEntity> getAllChildren(List<HlUserEntity> allUser, String userName){
+		return allUser.stream().filter(user -> user.getRecUser().equals(userName)).collect(Collectors.toList());
+	}
+
+	private void buildChildren(List<HlUserEntity> allUser, String userName, Nodes nodes) {
+		if(this.hasChild(allUser, userName)){
+			List<HlUserEntity> children = this.getAllChildren(allUser, userName);
+			for (HlUserEntity hlUserEntity : children) {
+				Nodes childNode = new Nodes();
+				childNode.setUserNode(hlUserEntity);
+				this.buildChildren(allUser, childNode.getUserNode().getUserName(), childNode);
+				nodes.getChildren().add(childNode);
+			}
+		}
 	}
 
 	@Override
