@@ -1,10 +1,20 @@
 $(function () {
-	
 	function statusFmatter(cellvalue, options, rowObject){
 		if(1 == cellvalue){
 			return '申请';
 		}else {
 			return '已购买';
+		}
+	}
+	function approachFmatter(cellvalue, options, rowObject){
+		if(1 == cellvalue){
+			return '现金';
+		}else if(2 == cellvalue) {
+			return '转账';
+		}else if(3 == cellvalue) {
+			return '回填单';
+		}else{
+			return '无';
 		}
 	}
 	
@@ -18,6 +28,8 @@ $(function () {
 			{ label: '购买数量', name: 'amount', index: 'amount', width: 80 }, 			
 			{ label: '购买状态', name: 'status', index: 'status', width: 80, formatter: statusFmatter }, 			
 			{ label: '申请日期', name: 'applyDate', index: 'apply_date', width: 80 }, 			
+			{ label: '付款方式', name: 'payApproach', index: 'pay_approach', width: 80, formatter: approachFmatter }, 			
+			{ label: '实付金额', name: 'realPay', index: 'real_pay', width: 80 },			
 			{ label: '备注', name: 'comment', index: 'comment', width: 80 }			
         ],
 		viewrecords: true,
@@ -53,7 +65,14 @@ var vm = new Vue({
 	data:{
 		showList: true,
 		title: null,
-		hlPurchase: {}
+		payApproach :　[
+			{ text: '现金', value: '1' },
+			{ text: '转账', value: '2' },
+			{ text: '回填单', value: '3' }
+			],
+		selected : "1",
+		hlPurchase: {
+		}
 	},
 	methods: {
 		query: function () {
@@ -92,6 +111,7 @@ var vm = new Vue({
 		},
 		saveOrUpdate: function (event) {
 			var url = vm.hlPurchase.id == null ? "hladmin/hlpurchase/save" : "hladmin/hlpurchase/update";
+			vm.hlPurchase.payApproach = vm.selected;
 			$.ajax({
 				type: "POST",
 			    url: baseURL + url,
@@ -120,7 +140,6 @@ var vm = new Vue({
 					return;
 				}
 			}
-			debugger
 			confirm('确定要删除选中的记录？', function(){
 				$.ajax({
 					type: "POST",
@@ -138,6 +157,9 @@ var vm = new Vue({
 					}
 				});
 			});
+		},
+		exportExcel: function(){
+			location.href = baseURL + "hladmin/hlpurchase/export";
 		},
 		getInfo: function(id){
 			$.get(baseURL + "hladmin/hlpurchase/info/"+id, function(r){

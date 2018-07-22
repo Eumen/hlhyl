@@ -1,11 +1,14 @@
 package com.suke.czx.modules.hladmin.controller;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.suke.czx.common.utils.ExcelUtil;
 import com.suke.czx.common.utils.PageUtils;
 import com.suke.czx.common.utils.Query;
 import com.suke.czx.common.utils.R;
@@ -42,9 +46,9 @@ public class HlPurchaseController extends AbstractController {
 	 */
 	@RequestMapping("/list")
 	public R list(@RequestParam Map<String, Object> params) {
-		
+
 		String userName = this.getUser().getUsername();
-		if(!"admin1".equals(userName)){
+		if (!userName.contains("admin")) {
 			params.put("userName", userName);
 		}
 		// 查询列表数据
@@ -117,6 +121,27 @@ public class HlPurchaseController extends AbstractController {
 	public R delete(@RequestBody Integer[] ids) {
 		hlPurchaseService.deleteBatch(ids);
 		return R.ok();
+	}
+
+	@RequestMapping("/export")
+	public void export(HttpServletResponse response) {
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<HlPurchaseEntity> dataset = hlPurchaseService.queryList(map);
+
+		response.reset();
+		response.setHeader("Content-Disposition", "attachment; filename=\"purchase.xls\"");
+		response.setContentType("application/msexcel");
+		response.addHeader("Cache-Control", "no-cache");
+
+		String[] headers = new String[] { "编号", "用户名", "姓名", "数量", "状态（1、申请  2、审核通过）", "申请日期", "付款方式(1,现金 2,转账 3,回执单)", "实付金额", "审核日期",
+		"注释" };
+		try {
+			OutputStream out = response.getOutputStream();
+			ExcelUtil.exportExcel("用户购买货币信息", headers, dataset, out, "yyyy-MM-dd");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -1,8 +1,12 @@
 package com.suke.czx.modules.sys.controller;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.druid.util.StringUtils;
 import com.suke.czx.common.entity.Nodes;
+import com.suke.czx.common.utils.ExcelUtil;
 import com.suke.czx.common.utils.PageUtils;
 import com.suke.czx.common.utils.Query;
 import com.suke.czx.common.utils.R;
+import com.suke.czx.modules.hladmin.entity.HlPurchaseEntity;
 import com.suke.czx.modules.hladmin.entity.HlRewardEntity;
 import com.suke.czx.modules.hladmin.service.HlHylPriceService;
 import com.suke.czx.modules.hladmin.service.HlRewardService;
@@ -163,15 +169,36 @@ public class HlUserController extends AbstractController {
 
 	@RequestMapping("/getAllUserMap")
 	public R getAllUserMap(@RequestParam("userName") String userName) {
-		if(userName.equals("admin1")){
+		if (userName.equals("admin1")) {
 			return R.error("不允许查询管理员信息");
 		}
-		if (StringUtils.isEmpty(userName)){
+		if (StringUtils.isEmpty(userName)) {
 			userName = this.getUser().getUsername();
 		}
-		
+
 		Nodes nodes = hlUserService.getAllUserMap(userName);
 		return R.ok().put("nodes", nodes);
+	}
+
+	@RequestMapping("/export")
+	public void export(HttpServletResponse response) {
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<HlUserEntity> dataset = hlUserService.queryList(map);
+
+		response.reset();
+		response.setHeader("Content-Disposition", "attachment; filename=\"user.xls\"");
+		response.setContentType("application/msexcel");
+		response.addHeader("Cache-Control", "no-cache");
+
+		String[] headers = new String[] { "编号", "用户名", "姓名", "", "身份证", "电话", "开户银行", "银行卡号", "流通货币数量", "锁仓数量", "推荐人账号",
+				"推荐人姓名", "注册日期", "注释" };
+		try {
+			OutputStream out = response.getOutputStream();
+			ExcelUtil.exportExcel("用户购买货币信息", headers, dataset, out, "yyyy-MM-dd");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

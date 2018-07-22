@@ -69,6 +69,7 @@ public class HlPurchaseServiceImpl implements HlPurchaseService {
 	@Override
 	@Transactional
 	public void audit(HlPurchaseEntity hlPurchase) {
+		hlPurchase.setPurchaseDate(new Date());
 		hlPurchaseDao.update(hlPurchase);
 		String userName = hlPurchase.getUserName();
 		Map<String, String> userMap = new HashMap<String, String>();

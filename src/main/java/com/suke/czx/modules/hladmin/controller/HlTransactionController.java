@@ -1,8 +1,12 @@
 package com.suke.czx.modules.hladmin.controller;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.suke.czx.common.utils.ExcelUtil;
 import com.suke.czx.common.utils.PageUtils;
 import com.suke.czx.common.utils.Query;
 import com.suke.czx.common.utils.R;
+import com.suke.czx.modules.hladmin.entity.HlPurchaseEntity;
 import com.suke.czx.modules.hladmin.entity.HlTransactionEntity;
 import com.suke.czx.modules.hladmin.service.HlTransactionService;
 import com.suke.czx.modules.sys.controller.AbstractController;
@@ -98,6 +104,30 @@ public class HlTransactionController extends AbstractController {
 		hlTransactionService.save(hlTransaction);
 
 		return R.ok();
+	}
+	
+	/**
+	 * 删除
+	 */
+	@RequestMapping("/export")
+	public void export(HttpServletResponse response) {
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<HlTransactionEntity> dataset = hlTransactionService.queryList(map);
+
+		response.reset();
+		response.setHeader("Content-Disposition", "attachment; filename=\"transactional.xls\"");
+		response.setContentType("application/msexcel");
+		response.addHeader("Cache-Control", "no-cache");
+
+		String[] headers = new String[] { "编号", "转账账号", "转账姓名", "收款账号", "收款姓名", "交易类型1. 对私 2. 对公", "交易数量",
+				"实际到账数量（对公扣除15%）", "交易日期", "注释" };
+		try {
+			OutputStream out = response.getOutputStream();
+			ExcelUtil.exportExcel("用户交易信息", headers, dataset, out, "yyyy-MM-dd");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

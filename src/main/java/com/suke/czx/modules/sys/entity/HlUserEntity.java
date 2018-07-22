@@ -10,9 +10,8 @@ import java.util.Date;
  * @email ${email}
  * @date 2018-06-02 12:49:13
  */
+@SuppressWarnings("serial")
 public class HlUserEntity implements Serializable {
-	private static final long serialVersionUID = 1L;
-
 	// 会员信息表
 	private Integer id;
 	//

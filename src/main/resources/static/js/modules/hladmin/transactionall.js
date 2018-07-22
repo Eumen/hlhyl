@@ -122,6 +122,9 @@ var vm = new Vue({
                 vm.hlTransaction = r.hlTransaction;
             });
 		},
+		exportExcel: function(){
+			location.href = baseURL + "hladmin/hltransaction/export";
+		},
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');

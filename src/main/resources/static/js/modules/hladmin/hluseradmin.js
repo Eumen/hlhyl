@@ -132,6 +132,9 @@ var vm = new Vue({
 	            });
 			});
 		},
+		exportExcel: function(){
+			location.href = "/sys/hluser/export";
+		},
 		reload: function (event) {
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');

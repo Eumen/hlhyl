@@ -11,8 +11,8 @@ import java.util.Date;
  * @email ${email}
  * @date 2018-06-04 22:36:46
  */
+@SuppressWarnings("serial")
 public class HlTransactionEntity implements Serializable {
-	private static final long serialVersionUID = 1L;
 	
 	//会员交易明细表
 	private Integer id;

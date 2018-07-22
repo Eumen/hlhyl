@@ -12,6 +12,8 @@
         <result property="status" column="status"/>
         <result property="applyDate" column="apply_date"/>
         <result property="purchaseDate" column="purchase_date"/>
+        <result property="pay_approach" column="payApproach"/>
+        <result property="real_pay" column="realPay"/>
         <result property="comment" column="comment"/>
     </resultMap>
 
@@ -53,6 +55,8 @@
 			`status`, 
 			`apply_date`, 
 			`purchase_date`, 
+			`pay_approach`, 
+			`real_pay`, 
 			`comment`
 		)
 		values
@@ -64,6 +68,8 @@
 			#{status}, 
 			#{applyDate}, 
 			#{purchaseDate}, 
+			#{payApproach}, 
+			#{realPay}, 
 			#{comment}
 		)
 	</insert>
@@ -77,6 +83,8 @@
 			<if test="status != null">`status` = #{status}, </if>
 			<if test="applyDate != null">`apply_date` = #{applyDate}, </if>
 			<if test="purchaseDate != null">`purchase_date` = #{purchaseDate}, </if>
+			<if test="payApproach != null">`pay_approach` = #{payApproach}, </if>
+			<if test="realPay != null">`real_pay` = #{realPay}, </if>
 			<if test="comment != null">`comment` = #{comment}</if>
 		</set>
 		where id = #{id}
