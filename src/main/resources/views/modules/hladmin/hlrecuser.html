@@ -47,8 +47,35 @@
 				<input type="text" class="form-control" id="userName" placeholder="用户名">
 			</div>
 			<a class="btn btn-primary" id="queryPerson"><i class="fa fa-pencil-square-o"></i>&nbsp;查询</a>
+			<input type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myModal" value="部门业绩"/>
 		</div>
     <div id="main-content" style="text-align: left; float: left; width:100%; overflow: auto"></div>
+    
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<table class="table">
+				  <thead>
+				    <tr>
+				      <th>部门</th>
+				      <th>业绩总额</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr v-for="(value, key) in achievement">
+				      <td>{{ key }}</td>
+				      <td>{{+ value }}</td>
+				    </tr>
+				  </tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+	</div>
 </div>
 
 <script src="../../js/modules/hladmin/hlrecuser.js"></script>

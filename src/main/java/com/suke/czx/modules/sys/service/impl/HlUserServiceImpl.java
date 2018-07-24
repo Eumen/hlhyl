@@ -1,23 +1,24 @@
 package com.suke.czx.modules.sys.service.impl;
 
-import org.apache.commons.lang.RandomStringUtils;
-import org.apache.shiro.crypto.hash.Sha256Hash;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.shiro.crypto.hash.Sha256Hash;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.suke.czx.common.entity.Nodes;
 import com.suke.czx.common.exception.RRException;
+import com.suke.czx.modules.hladmin.dao.HlPurchaseDao;
+import com.suke.czx.modules.hladmin.entity.HlPurchaseEntity;
 import com.suke.czx.modules.sys.dao.HlUserDao;
 import com.suke.czx.modules.sys.dao.SysUserDao;
 import com.suke.czx.modules.sys.dao.SysUserRoleDao;
@@ -33,6 +34,8 @@ public class HlUserServiceImpl implements HlUserService {
 	private SysUserDao sysUserDao;
 	@Autowired
 	private SysUserRoleDao sysUserRoleDao;
+	@Autowired
+	private HlPurchaseDao hlPurchaseDao;
 
 	@Override
 	public HlUserEntity queryObject(Integer id) {
@@ -110,12 +113,40 @@ public class HlUserServiceImpl implements HlUserService {
 		Nodes nodes = new Nodes();
 		nodes.setUserNode(this.getUserByUserName(allUser, userName));
 		this.buildChildren(allUser, nodes.getUserNode().getUserName(), nodes);
+
+		// 业绩统计
+		// 取每个部门的负责人
+		List<HlUserEntity> departmentUser = this.getAllChildren(allUser, userName);
+		Map<String, List<HlUserEntity>> achieveMem = new HashMap<String, List<HlUserEntity>>();
+		if (CollectionUtils.isNotEmpty(departmentUser)) {
+			List<HlUserEntity> allChildren;
+			for (HlUserEntity hlUserEntity : departmentUser) {
+				allChildren = new ArrayList<HlUserEntity>();
+				this.getAllChildrenNodes(allUser, hlUserEntity.getUserName(), allChildren);
+				achieveMem.put(hlUserEntity.getUserName(), allChildren);
+			}
+		}
+
+		List<HlPurchaseEntity> totalAmount = this.hlPurchaseDao.queryAmountGroupByUserName();
+		achieveMem.forEach((key, value) -> {
+			double departAmount = 0;
+			for (HlUserEntity user : value) {
+				for (HlPurchaseEntity userAmount : totalAmount) {
+					if (user.getUserName().equals(userAmount.getUserName())) {
+						departAmount += userAmount.getAmount();
+					}
+				}
+			}
+			nodes.getAchievement().put(key, departAmount);
+		});
+
 		return nodes;
 	}
 
 	private HlUserEntity getUserByUserName(List<HlUserEntity> allUser, String userName) {
-		Optional<HlUserEntity> stream = allUser.stream().filter(user -> user.getUserName().equals(userName)).findFirst();
-		if(!stream.isPresent()){
+		Optional<HlUserEntity> stream = allUser.stream().filter(user -> user.getUserName().equals(userName))
+				.findFirst();
+		if (!stream.isPresent()) {
 			throw new RRException("用户不存在");
 		}
 		return stream.get();
@@ -124,13 +155,23 @@ public class HlUserServiceImpl implements HlUserService {
 	private boolean hasChild(List<HlUserEntity> allUser, String userName) {
 		return allUser.stream().filter(user -> user.getRecUser().equals(userName)).count() > 0 ? true : false;
 	}
-	
-	private List<HlUserEntity> getAllChildren(List<HlUserEntity> allUser, String userName){
+
+	private List<HlUserEntity> getAllChildren(List<HlUserEntity> allUser, String userName) {
 		return allUser.stream().filter(user -> user.getRecUser().equals(userName)).collect(Collectors.toList());
 	}
 
+	private void getAllChildrenNodes(List<HlUserEntity> allUser, String userName, List<HlUserEntity> allChildren) {
+		if (this.hasChild(allUser, userName)) {
+			List<HlUserEntity> children = this.getAllChildren(allUser, userName);
+			allChildren.addAll(children);
+			for (HlUserEntity hlUserEntity : children) {
+				this.getAllChildrenNodes(allUser, hlUserEntity.getUserName(), allChildren);
+			}
+		}
+	}
+
 	private void buildChildren(List<HlUserEntity> allUser, String userName, Nodes nodes) {
-		if(this.hasChild(allUser, userName)){
+		if (this.hasChild(allUser, userName)) {
 			List<HlUserEntity> children = this.getAllChildren(allUser, userName);
 			for (HlUserEntity hlUserEntity : children) {
 				Nodes childNode = new Nodes();

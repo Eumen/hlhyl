@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +22,6 @@ import com.suke.czx.common.utils.ExcelUtil;
 import com.suke.czx.common.utils.PageUtils;
 import com.suke.czx.common.utils.Query;
 import com.suke.czx.common.utils.R;
-import com.suke.czx.modules.hladmin.entity.HlPurchaseEntity;
 import com.suke.czx.modules.hladmin.entity.HlRewardEntity;
 import com.suke.czx.modules.hladmin.service.HlHylPriceService;
 import com.suke.czx.modules.hladmin.service.HlRewardService;
@@ -169,7 +167,7 @@ public class HlUserController extends AbstractController {
 
 	@RequestMapping("/getAllUserMap")
 	public R getAllUserMap(@RequestParam("userName") String userName) {
-		if (userName.equals("admin1")) {
+		if (userName.contains("admin")) {
 			return R.error("不允许查询管理员信息");
 		}
 		if (StringUtils.isEmpty(userName)) {

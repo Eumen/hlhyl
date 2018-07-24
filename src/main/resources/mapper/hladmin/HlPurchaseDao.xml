@@ -41,6 +41,10 @@
 		</if>
 	</select>
 	
+	<select id="queryAmountGroupByUserName" resultType="com.suke.czx.modules.hladmin.entity.HlPurchaseEntity">
+		select user_name, sum(amount) amount from hl_purchase where status = 2 GROUP BY user_name order by user_name;
+	</select>
+	
  	<select id="queryTotal" resultType="int">
 		select count(*) from hl_purchase 
 	</select>

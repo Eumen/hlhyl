@@ -1,8 +1,11 @@
 package com.suke.czx.modules.hladmin.dao;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
 import com.suke.czx.modules.hladmin.entity.HlPurchaseEntity;
 import com.suke.czx.modules.sys.dao.BaseDao;
-import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 购买货币申请
@@ -13,5 +16,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface HlPurchaseDao extends BaseDao<HlPurchaseEntity> {
-	
+	List<HlPurchaseEntity> queryAmountGroupByUserName();
 }

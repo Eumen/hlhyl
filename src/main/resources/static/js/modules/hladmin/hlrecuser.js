@@ -36,6 +36,8 @@ $(function () {
 		root = json.nodes;
 		root.x0 = 0;
 		root.y0 = 0;
+		
+		vm.achievement = json.nodes.achievement;
 
 		function collapse(d) {
 			if (d.children) {
@@ -158,5 +160,17 @@ $(function () {
 		update(d);
 	}
 
+});
+
+var vm = new Vue({
+	el:'#rrapp',
+	data:{
+		showList: true,
+		title: null,
+		achievement: {
+		},
+		recLink: null,
+		imgUrl: null
+	}
 });
 
