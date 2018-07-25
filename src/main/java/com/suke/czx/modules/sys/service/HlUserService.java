@@ -24,6 +24,8 @@ public interface HlUserService {
 	void save(HlUserEntity hlUser);
 
 	void update(HlUserEntity hlUser);
+	
+	void lock(HlUserEntity hlUser, Double willLockAmount);
 
 	void delete(Integer id);
 

@@ -81,4 +81,9 @@ public class HlTransactionServiceImpl implements HlTransactionService {
 		hlTransactionDao.deleteBatch(ids);
 	}
 
+	@Override
+	public int querySumWeekByUserName(String userName) {
+		return this.hlTransactionDao.querySumWeekByUserName(userName);
+	}
+
 }

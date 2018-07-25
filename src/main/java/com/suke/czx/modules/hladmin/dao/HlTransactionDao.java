@@ -13,5 +13,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface HlTransactionDao extends BaseDao<HlTransactionEntity> {
-	
+	int querySumWeekByUserName(String userName);
 }

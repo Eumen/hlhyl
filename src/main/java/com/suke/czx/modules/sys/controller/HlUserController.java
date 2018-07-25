@@ -22,7 +22,9 @@ import com.suke.czx.common.utils.ExcelUtil;
 import com.suke.czx.common.utils.PageUtils;
 import com.suke.czx.common.utils.Query;
 import com.suke.czx.common.utils.R;
+import com.suke.czx.modules.hladmin.dao.LockLogDao;
 import com.suke.czx.modules.hladmin.entity.HlRewardEntity;
+import com.suke.czx.modules.hladmin.entity.LockLogEntity;
 import com.suke.czx.modules.hladmin.service.HlHylPriceService;
 import com.suke.czx.modules.hladmin.service.HlRewardService;
 import com.suke.czx.modules.sys.entity.HlUserEntity;
@@ -135,7 +137,8 @@ public class HlUserController extends AbstractController {
 
 		hue.setAmount(hue.getAmount() - willLockAmount);
 		hue.setLockAmount(hue.getLockAmount() + willLockAmount);
-		hlUserService.update(hue);
+		hlUserService.lock(hue, willLockAmount);
+		
 		return R.ok();
 	}
 

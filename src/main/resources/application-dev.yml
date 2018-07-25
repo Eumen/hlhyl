@@ -24,7 +24,7 @@ spring:
             test-on-borrow: false
             test-on-return: false
             stat-view-servlet:
-                enabled: true
+                enabled: false
                 url-pattern: /druid/*
                 #login-username: admin
                 #login-password: admin

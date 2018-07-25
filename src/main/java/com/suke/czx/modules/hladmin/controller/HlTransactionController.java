@@ -20,7 +20,6 @@ import com.suke.czx.common.utils.ExcelUtil;
 import com.suke.czx.common.utils.PageUtils;
 import com.suke.czx.common.utils.Query;
 import com.suke.czx.common.utils.R;
-import com.suke.czx.modules.hladmin.entity.HlPurchaseEntity;
 import com.suke.czx.modules.hladmin.entity.HlTransactionEntity;
 import com.suke.czx.modules.hladmin.service.HlTransactionService;
 import com.suke.czx.modules.sys.controller.AbstractController;
@@ -86,7 +85,7 @@ public class HlTransactionController extends AbstractController {
 			return R.error("目标转账人不存在");
 		}
 
-		if (hlTransaction.getAmount() <= 0){
+		if (hlTransaction.getAmount() <= 0) {
 			return R.error("转账金额必须大于0");
 		}
 
@@ -101,11 +100,21 @@ public class HlTransactionController extends AbstractController {
 			return R.error("转账金额不允许大于流通持仓金额");
 		}
 
+		if (listOwnUser.get(0).getAmount() * 0.1 < hlTransaction.getAmount() && hlTransaction.getType() == 2) {
+			return R.error("转账金额不允许大于流通持仓金额 10%");
+		}
+		
+		// 七天之内只允许提现一次
+		int weekCount = this.hlTransactionService.querySumWeekByUserName(user.getUsername());
+		if(weekCount > 0){
+			return R.error("对公账户一周只允许一次");
+		}
+
 		hlTransactionService.save(hlTransaction);
 
 		return R.ok();
 	}
-	
+
 	/**
 	 * 删除
 	 */

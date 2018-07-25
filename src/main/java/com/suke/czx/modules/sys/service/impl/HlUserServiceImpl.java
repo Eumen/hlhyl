@@ -18,7 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.suke.czx.common.entity.Nodes;
 import com.suke.czx.common.exception.RRException;
 import com.suke.czx.modules.hladmin.dao.HlPurchaseDao;
+import com.suke.czx.modules.hladmin.dao.LockLogDao;
 import com.suke.czx.modules.hladmin.entity.HlPurchaseEntity;
+import com.suke.czx.modules.hladmin.entity.LockLogEntity;
 import com.suke.czx.modules.sys.dao.HlUserDao;
 import com.suke.czx.modules.sys.dao.SysUserDao;
 import com.suke.czx.modules.sys.dao.SysUserRoleDao;
@@ -36,6 +38,8 @@ public class HlUserServiceImpl implements HlUserService {
 	private SysUserRoleDao sysUserRoleDao;
 	@Autowired
 	private HlPurchaseDao hlPurchaseDao;
+	@Autowired
+	private LockLogDao lockLogDao;
 
 	@Override
 	public HlUserEntity queryObject(Integer id) {
@@ -95,6 +99,17 @@ public class HlUserServiceImpl implements HlUserService {
 	@Override
 	public void update(HlUserEntity hlUser) {
 		hlUserDao.update(hlUser);
+	}
+	
+	@Override
+	@Transactional
+	public void lock(HlUserEntity hlUser, Double willLockAmount) {
+		hlUserDao.update(hlUser);
+		LockLogEntity lock = new LockLogEntity();
+		lock.setUserName(hlUser.getUserName());
+		lock.setAmount(willLockAmount);
+		lock.setLockDate(new Date());
+		lockLogDao.save(lock);
 	}
 
 	@Override

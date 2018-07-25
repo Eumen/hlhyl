@@ -39,6 +39,12 @@
  	<select id="queryTotal" resultType="int">
 		select count(*) from hl_transaction 
 	</select>
+	
+	<select id="querySumWeekByUserName" resultType="int">
+		select count(1) from hl_transaction where user_name = #{param1} 
+		and YEARWEEK(date_format(tran_date,'%Y-%m-%d')) = YEARWEEK(now())
+		and type = 2 order by tran_date desc;
+	</select>
 	 
 	<insert id="save" parameterType="com.suke.czx.modules.hladmin.entity.HlTransactionEntity" useGeneratedKeys="true" keyProperty="id">
 		insert into hl_transaction

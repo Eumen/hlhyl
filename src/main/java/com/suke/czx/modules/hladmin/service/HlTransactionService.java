@@ -27,4 +27,6 @@ public interface HlTransactionService {
 	void delete(Integer id);
 	
 	void deleteBatch(Integer[] ids);
+	
+	int querySumWeekByUserName(String userName);
 }
