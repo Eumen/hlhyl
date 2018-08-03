@@ -80,6 +80,29 @@
 			#{comment}
 		)
 	</insert>
+	
+	<insert id="saveBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+		insert into hl_reward
+		(
+			`user_name`, 
+			`name`, 
+			`amount`, 
+			`award_date`, 
+			`award_type`, 
+			`comment`
+		)
+		values
+		<foreach collection ="list" item="award" index= "index" separator =",">
+		(
+			#{award.userName}, 
+			#{award.name}, 
+			#{award.amount}, 
+			#{award.awardDate}, 
+			#{award.awardType}, 
+			#{award.comment}
+		)
+		</foreach>
+	</insert>
 	 
 	<update id="update" parameterType="com.suke.czx.modules.hladmin.entity.HlRewardEntity">
 		update hl_reward 

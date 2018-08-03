@@ -48,9 +48,13 @@ public class HlTransactionController extends AbstractController {
 	 */
 	@RequestMapping("/list")
 	public R list(@RequestParam Map<String, Object> params) {
+		String userName = this.getUser().getUsername();
 		// 查询列表数据
 		Query query = new Query(params);
-
+		if (!userName.contains("admin")) {
+			query.put("userName", userName);
+		}
+		
 		List<HlTransactionEntity> hlTransactionList = hlTransactionService.queryList(query);
 		int total = hlTransactionService.queryTotal(query);
 
@@ -103,10 +107,10 @@ public class HlTransactionController extends AbstractController {
 		if (listOwnUser.get(0).getAmount() * 0.1 < hlTransaction.getAmount() && hlTransaction.getType() == 2) {
 			return R.error("转账金额不允许大于流通持仓金额 10%");
 		}
-		
+
 		// 七天之内只允许提现一次
 		int weekCount = this.hlTransactionService.querySumWeekByUserName(user.getUsername());
-		if(weekCount > 0){
+		if (weekCount > 0) {
 			return R.error("对公账户一周只允许一次");
 		}
 

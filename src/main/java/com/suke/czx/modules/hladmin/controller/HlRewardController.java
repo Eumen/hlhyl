@@ -17,6 +17,7 @@ import com.suke.czx.common.utils.Query;
 import com.suke.czx.common.utils.R;
 import com.suke.czx.modules.hladmin.entity.HlRewardEntity;
 import com.suke.czx.modules.hladmin.service.HlRewardService;
+import com.suke.czx.modules.sys.controller.AbstractController;
 
 /**
  * 
@@ -27,7 +28,7 @@ import com.suke.czx.modules.hladmin.service.HlRewardService;
  */
 @RestController
 @RequestMapping("/hladmin/hlreward")
-public class HlRewardController {
+public class HlRewardController extends AbstractController {
 	@Autowired
 	private HlRewardService hlRewardService;
 
@@ -36,8 +37,12 @@ public class HlRewardController {
 	 */
 	@RequestMapping("/list")
 	public R list(@RequestParam Map<String, Object> params) {
+		String userName = this.getUser().getUsername();
 		// 查询列表数据
 		Query query = new Query(params);
+		if (!userName.contains("admin")) {
+			query.put("userName", userName);
+		}
 
 		List<HlRewardEntity> hlRewardList = hlRewardService.queryList(query);
 		int total = hlRewardService.queryTotal(query);

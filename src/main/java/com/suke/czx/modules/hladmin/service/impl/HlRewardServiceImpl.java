@@ -1,6 +1,7 @@
 package com.suke.czx.modules.hladmin.service.impl;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -65,30 +66,35 @@ public class HlRewardServiceImpl implements HlRewardService {
 	public void generate() {
 		DecimalFormat df = new DecimalFormat("#.00");
 		List<HlUserEntity> listUser = hlUserDao.queryList(null);
-		listUser.stream().filter(user -> user.getLockAmount() > 0.0).forEach(user -> {
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("userName", user.getUserName());
-			map.put("awardType", "1");
-			int count = hlRewardDao.queryTotal(map);
-			if (count % 60 == 0 && count > 0) {
-				user.setAmount(user.getAmount() + user.getLockAmount());
-				user.setLockAmount(0.0d);
-				hlUserDao.update(user);
-			} else {
-				double award = user.getLockAmount() * RangeUtils.lockRange(user.getLockAmount());
-				user.setAmount(user.getAmount() + Double.valueOf(df.format(award)));
-				hlUserDao.update(user);
+		List<HlRewardEntity> awardList = new ArrayList<HlRewardEntity>();
+		for(HlUserEntity user:listUser){
+			if(user.getLockAmount() > 0.0){
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("userName", user.getUserName());
+				map.put("awardType", "1");
+				int count = hlRewardDao.queryTotal(map);
+				if (count % 160 == 0 && count > 0) {
+					user.setAmount(user.getAmount() + user.getLockAmount());
+					user.setLockAmount(0.0d);
+					hlUserDao.update(user);
+				} else {
+					double award = user.getLockAmount() * RangeUtils.lockRange(user.getLockAmount());
+					user.setAmount(user.getAmount() + Double.valueOf(df.format(award)));
+					hlUserDao.update(user);
 
-				HlRewardEntity hre = new HlRewardEntity();
-				hre.setAmount(award);
-				hre.setUserName(user.getUserName());
-				hre.setName(user.getName());
-				hre.setAwardDate(new Date());
-				hre.setAwardType(1);
-				hre.setComment("锁仓奖金");
-				hlRewardDao.save(hre);
+					HlRewardEntity hre = new HlRewardEntity();
+					hre.setAmount(award);
+					hre.setUserName(user.getUserName());
+					hre.setName(user.getName());
+					hre.setAwardDate(new Date());
+					hre.setAwardType(1);
+					hre.setComment("锁仓奖金");
+					awardList.add(hre);
+					//hlRewardDao.save(hre);
+				}
 			}
-		});
+		}
+		hlRewardDao.saveBatch(awardList);
 	}
 
 	@Override

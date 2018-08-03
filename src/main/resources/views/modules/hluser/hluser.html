@@ -71,6 +71,18 @@
 				<input type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myRecModal" value="我要推广"/>
 			</div>
 		</form>
+		
+	    
+	</div>
+	<div v-show="showList" class="panel panel-default">
+		<div class="panel-heading">个人交易信息</div>
+		<table id="transaction"></table>
+	    <div id="transactionGridPager"></div>
+	</div>
+	<div v-show="showList" class="panel panel-default">
+		<div class="panel-heading">个人奖金信息</div>
+		<table id="reward"></table>
+	    <div id="rewardGridPager"></div>
 	</div>
 	
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

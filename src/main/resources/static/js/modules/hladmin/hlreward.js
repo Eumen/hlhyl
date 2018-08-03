@@ -6,10 +6,10 @@ $(function () {
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
 			{ label: '用户登陆名', name: 'userName', index: 'user_name', width: 80 }, 			
 			{ label: '姓名', name: 'name', index: 'name', width: 80 }, 			
-			{ label: '', name: 'amount', index: 'amount', width: 80 }, 			
-			{ label: '', name: 'awardDate', index: 'award_date', width: 80 }, 			
-			{ label: '1. 锁仓奖励2. 直推奖励', name: 'awardType', index: 'award_type', width: 80 }, 			
-			{ label: '', name: 'comment', index: 'comment', width: 80 }			
+			{ label: '金额', name: 'amount', index: 'amount', width: 80 }, 			
+			{ label: '日期', name: 'awardDate', index: 'award_date', width: 80 }, 			
+			{ label: '类型:1. 锁仓奖励2. 直推奖励', name: 'awardType', index: 'award_type', width: 80 }, 			
+			{ label: '备注', name: 'comment', index: 'comment', width: 80 }			
         ],
 		viewrecords: true,
         height: 385,
@@ -53,7 +53,8 @@ var vm = new Vue({
 //			vm.showList = false;
 //			vm.title = "新增";
 //			vm.hlReward = {};
-			confirm('确定生成当日锁仓奖金？', function(){
+//			confirm('确定生成当日锁仓奖金？', function(){
+				$("#generate").addClass("disabled");
 				$.ajax({
 					type: "POST",
 				    url: baseURL + "hladmin/hlreward/generate",
@@ -68,7 +69,7 @@ var vm = new Vue({
 						}
 					}
 				});
-			});
+//			});
 		},
 		update: function (event) {
 			var id = getSelectedRow();

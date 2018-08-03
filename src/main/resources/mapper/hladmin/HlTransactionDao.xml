@@ -23,6 +23,11 @@
 
 	<select id="queryList" resultType="com.suke.czx.modules.hladmin.entity.HlTransactionEntity">
 		select * from hl_transaction
+		<where>
+        	<if test="userName != null">
+				and `user_name` = #{userName} 
+			</if>
+        </where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}

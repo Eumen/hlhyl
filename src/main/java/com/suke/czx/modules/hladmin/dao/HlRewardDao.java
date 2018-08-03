@@ -1,11 +1,12 @@
 package com.suke.czx.modules.hladmin.dao;
 
-import com.suke.czx.modules.hladmin.entity.HlRewardEntity;
-import com.suke.czx.modules.sys.dao.BaseDao;
-
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+
+import com.suke.czx.modules.hladmin.entity.HlRewardEntity;
+import com.suke.czx.modules.sys.dao.BaseDao;
 
 /**
  * 
@@ -17,4 +18,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface HlRewardDao extends BaseDao<HlRewardEntity> {
 	int isGenerate(Map<String, String> map);
+	
+	void saveBatch(List<HlRewardEntity> awardList);
 }
