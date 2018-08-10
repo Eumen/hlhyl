@@ -26,6 +26,7 @@ $(function () {
 			{ label: '转账姓名', name: 'targetName', index: 'target_name', width: 80 }, 			
 			{ label: '交易类型', name: 'type', index: 'type', width: 80, formatter: transactionFmatter  }, 			
 			{ label: '交易数量', name: 'amount', index: 'amount', width: 80 }, 			
+			{ label: '交易时间', name: 'tranDate', index: 'tran_date', width: 80 }, 			
 			{ label: '对公账户收取手续费', name: 'realAmount', index: 'real_amount', width: 80 }, 			
 			{ label: '备注', name: 'comment', index: 'comment', width: 80 }					
         ],
