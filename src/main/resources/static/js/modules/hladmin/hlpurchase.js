@@ -29,8 +29,6 @@ $(function () {
 			{ label: '购买数量', name: 'amount', index: 'amount', width: 80 }, 		
 			{ label: '购买状态', name: 'status', index: 'status', width: 80, formatter: statusFmatter }, 			
 			{ label: '申请日期', name: 'applyDate', index: 'apply_date', width: 80 }, 			
-			{ label: '付款方式', name: 'payApproach', index: 'pay_approach', width: 80, formatter: approachFmatter }, 			
-			{ label: '实付金额', name: 'realPay', index: 'real_pay', width: 80 }, 			
 			{ label: '备注', name: 'comment', index: 'comment', width: 80 }			
         ],
 		viewrecords: true,

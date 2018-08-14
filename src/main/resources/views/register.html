@@ -67,6 +67,11 @@
           <input type="text" class="form-control" v-model="recUser" placeholder="推荐人账号">
           <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>
+      <div class="form-group has-feedback right">
+      	<div style="float:right">
+      	  <a class="form-control-lg" data-toggle="modal" data-target="#myModal">消费协议</a> <input type="checkbox" class="form-control-lg" id="agreement" />我同意
+      	</div>
+      </div>
       <div class="row">
         <div class="col-xs-8">
           <div class="checkbox icheck">
@@ -83,6 +88,52 @@
   </div>
   <!-- /.login-box-body -->
 </div>
+
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">快语国际《汉语通》消费协议</h4>
+      </div>
+      <div class="modal-body">
+        <b>一、活动目的</b></br>
+为了答谢新老客户长期以来对我公司的支持与厚爱，我公司实行消费获积分奖励活动，来回馈广大客户对我公司的贡献，同时促进双方的深度合作，实现互惠共赢。</br>
+<b>二、积分制度</b></br>
+客户正常消费可同时获得相应积分，累计的积分可以兑换相应礼品。</br>
+<b>三、积分计算方法</b></br>
+积分分为两个部分：消费积分和奖励积分。</br> 
+1、 消费积分 </br>
+消费积分以0.63元起为最小单位，例如:单次现金消费满0.63元累计1分，不满0.63元，积分为0；单次签单消费满1000元累计奖励1600积分，</br>
+（1）积分计算以实收金额为准。</br>
+（2）消费金额中，不满1000元部分不进行前后累计积分。</br>
+（3）消费积分在消费达成当天记入积分（即累计积分）。</br>
+（4）如发生退换货，将从积分中扣除由于退换货部分产生的积分差额。</br>
+（5）积分只在同一帐户内累计，不同帐户的积分不能合并。</br>
+2、奖励积分</br>
+（1）积分锁仓期：可获得相应增值分红。</br>
+（2）积分增值：可兑换相应产品和现金奖励。</br>
+<b>四、积分兑换</b></br>
+1、兑换成功后将从会员帐户中扣减相应积分分值。</br>
+2、积分兑换相应礼品，不做兑换现金等其他用途。</br>
+3、积分兑的礼品换暂不提供更换或退货服务，所以请您细心看准后再进行兑换。</br>
+<b>五、积分查询</b></br>
+1、每次进行积分后均会说明截止到当次积分之前积分合计。</br>
+2、在会员系统查询。</br>
+<b>六、其他说明</b></br>
+如果在积分活动期间双方停止合作时积分、激励自动失效，所有累计积分归零，礼品不再发放。
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
 <!-- /.login-box -->
 <script src="libs/jquery.min.js"></script>
 <script src="plugins/jqgrid/jquery.jqGrid.min.js"></script>
@@ -140,6 +191,14 @@
                 });
             },
             validator: function () {
+            	
+            	if (!document.getElementById('agreement').checked)
+				{
+            		vm.error = true;
+                    vm.errorMsg = "请同意消费协议！";
+                    return true;
+				}
+            	
                 if(isBlank(vm.userName)){
                 	vm.error = true;
                     vm.errorMsg = "用户名不能为空";
