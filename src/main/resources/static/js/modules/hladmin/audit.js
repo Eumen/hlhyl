@@ -104,9 +104,6 @@ var vm = new Vue({
 			if(id == null){
 				return ;
 			}
-			vm.showList = false;
-            vm.title = "修改";
-            
             vm.getInfo(id)
 		},
 		saveOrUpdate: function (event) {
@@ -163,13 +160,16 @@ var vm = new Vue({
 		},
 		getInfo: function(id){
 			$.get(baseURL + "hladmin/hlpurchase/info/"+id, function(r){
+				vm.hlPurchase = r.hlPurchase;
 				if(vm.hlPurchase.status == 2){
 					alert('不允许修改已审核的数据', function(index){
 						vm.reload();
 					});
 					return false;
+				}else{
+					vm.showList = false;
+		            vm.title = "修改";
 				}
-                vm.hlPurchase = r.hlPurchase;
             });
 		},
 		reload: function (event) {

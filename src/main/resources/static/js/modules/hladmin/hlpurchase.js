@@ -28,8 +28,7 @@ $(function () {
 			{ label: '用户姓名', name: 'name', index: 'name', width: 80 }, 			
 			{ label: '购买数量', name: 'amount', index: 'amount', width: 80 }, 		
 			{ label: '购买状态', name: 'status', index: 'status', width: 80, formatter: statusFmatter }, 			
-			{ label: '申请日期', name: 'applyDate', index: 'apply_date', width: 80 }, 			
-			{ label: '备注', name: 'comment', index: 'comment', width: 80 }			
+			{ label: '申请日期', name: 'applyDate', index: 'apply_date', width: 80 }			
         ],
 		viewrecords: true,
         height: 385,
@@ -85,9 +84,6 @@ var vm = new Vue({
 			if(id == null){
 				return ;
 			}
-			vm.showList = false;
-            vm.title = "修改";
-            
             vm.getInfo(id)
 		},
 		saveOrUpdate: function (event) {
@@ -136,7 +132,16 @@ var vm = new Vue({
 		},
 		getInfo: function(id){
 			$.get(baseURL + "hladmin/hlpurchase/info/"+id, function(r){
-                vm.hlPurchase = r.hlPurchase;
+				vm.hlPurchase = r.hlPurchase;
+				if(vm.hlPurchase.status == 2){
+					alert('不允许修改已审核的数据', function(index){
+						vm.reload();
+					});
+					return false;
+				}else{
+					vm.showList = false;
+		            vm.title = "修改";
+				}
             });
 		},
 		reload: function (event) {
