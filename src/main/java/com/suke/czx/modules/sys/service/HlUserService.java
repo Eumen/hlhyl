@@ -34,4 +34,6 @@ public interface HlUserService {
 	void password(int userId);
 
 	Nodes getAllUserMap(String userName);
+
+	void modifyRecUser(int id, String recNewUserName, String recNewName);
 }

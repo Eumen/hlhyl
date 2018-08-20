@@ -22,11 +22,11 @@ import com.suke.czx.common.utils.ExcelUtil;
 import com.suke.czx.common.utils.PageUtils;
 import com.suke.czx.common.utils.Query;
 import com.suke.czx.common.utils.R;
-import com.suke.czx.modules.hladmin.dao.LockLogDao;
 import com.suke.czx.modules.hladmin.entity.HlRewardEntity;
-import com.suke.czx.modules.hladmin.entity.LockLogEntity;
 import com.suke.czx.modules.hladmin.service.HlHylPriceService;
+import com.suke.czx.modules.hladmin.service.HlRecuserHistoryService;
 import com.suke.czx.modules.hladmin.service.HlRewardService;
+import com.suke.czx.modules.sys.entity.HlModifyRecUserEntity;
 import com.suke.czx.modules.sys.entity.HlUserEntity;
 import com.suke.czx.modules.sys.service.HlUserService;
 
@@ -138,7 +138,7 @@ public class HlUserController extends AbstractController {
 		hue.setAmount(hue.getAmount() - willLockAmount);
 		hue.setLockAmount(hue.getLockAmount() + willLockAmount);
 		hlUserService.lock(hue, willLockAmount);
-		
+
 		return R.ok();
 	}
 
@@ -179,6 +179,23 @@ public class HlUserController extends AbstractController {
 
 		Nodes nodes = hlUserService.getAllUserMap(userName);
 		return R.ok().put("nodes", nodes);
+	}
+
+	@RequestMapping("/modifyRecUser")
+	public R modifyRecUser(@RequestBody HlModifyRecUserEntity recNewUser) {
+		int id = recNewUser.getId();
+		String recNewUserName = recNewUser.getRecNewUserName();
+		String recNewName = recNewUser.getRecNewName();
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("userName", recNewUserName);
+		map.put("name", recNewName);
+		List<HlUserEntity> listUser = this.hlUserService.queryList(map);
+		if (listUser.size() > 0) {
+			this.hlUserService.modifyRecUser(id, recNewUserName, recNewName);
+		} else {
+			return R.error("新的推荐人不存在");
+		}
+		return R.ok();
 	}
 
 	@RequestMapping("/export")

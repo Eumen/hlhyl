@@ -17,9 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.suke.czx.common.entity.Nodes;
 import com.suke.czx.common.exception.RRException;
+import com.suke.czx.common.utils.DateUtils;
 import com.suke.czx.modules.hladmin.dao.HlPurchaseDao;
+import com.suke.czx.modules.hladmin.dao.HlRecuserHistoryDao;
 import com.suke.czx.modules.hladmin.dao.LockLogDao;
 import com.suke.czx.modules.hladmin.entity.HlPurchaseEntity;
+import com.suke.czx.modules.hladmin.entity.HlRecuserHistoryEntity;
 import com.suke.czx.modules.hladmin.entity.LockLogEntity;
 import com.suke.czx.modules.sys.dao.HlUserDao;
 import com.suke.czx.modules.sys.dao.SysUserDao;
@@ -40,6 +43,9 @@ public class HlUserServiceImpl implements HlUserService {
 	private HlPurchaseDao hlPurchaseDao;
 	@Autowired
 	private LockLogDao lockLogDao;
+
+	@Autowired
+	private HlRecuserHistoryDao hlRecuserHistoryDao;
 
 	@Override
 	public HlUserEntity queryObject(Integer id) {
@@ -100,7 +106,7 @@ public class HlUserServiceImpl implements HlUserService {
 	public void update(HlUserEntity hlUser) {
 		hlUserDao.update(hlUser);
 	}
-	
+
 	@Override
 	@Transactional
 	public void lock(HlUserEntity hlUser, Double willLockAmount) {
@@ -207,6 +213,24 @@ public class HlUserServiceImpl implements HlUserService {
 		sysUser.setSalt(sysUser.getSalt());
 		sysUser.setPassword(new Sha256Hash("112233", sysUser.getSalt()).toHex());
 		this.sysUserDao.update(sysUser);
+	}
+
+	@Override
+	@Transactional
+	public void modifyRecUser(int id, String recNewUserName, String recNewName) {
+		HlUserEntity user = this.hlUserDao.queryObject(id);
+		HlRecuserHistoryEntity hre = new HlRecuserHistoryEntity();
+		hre.setUserName(user.getUserName());
+		hre.setName(user.getName());
+		hre.setRecUserName(user.getRecUser());
+		hre.setRecName(user.getRecName());
+		hre.setRecNewUserName(recNewUserName);
+		hre.setRecNewName(recNewName);
+		hre.setComments(DateUtils.format(new Date(), "yyyy-mm-dd"));
+		hlRecuserHistoryDao.save(hre);
+		user.setRecUser(recNewUserName);
+		user.setRecName(recNewName);
+		this.hlUserDao.update(user);
 	}
 
 }

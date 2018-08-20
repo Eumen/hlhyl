@@ -42,6 +42,18 @@ $(function () {
         	$("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" }); 
         }
     });
+    
+    $("#modifyRecUser").click(function(){
+    	var id = getSelectedRow();
+    	if(id == null){
+			return ;
+		}
+    	$.get("/sys/hluser/info/"+id, function(r){
+            vm.hlUser = r.hlUser;
+            $('#myModal').modal('show');
+        });
+    });
+    
 });
 
 var vm = new Vue({
@@ -69,6 +81,33 @@ var vm = new Vue({
             vm.title = "修改";
             
             vm.getInfo(id)
+		},
+		updateRecUser: function(event){
+			var id = getSelectedRow();
+	    	if(id == null){
+				return ;
+			}
+	    	var data = {
+	    		id : id,
+	    		recNewUserName : vm.hlUser.recNewUserName,
+	    		recNewName : vm.hlUser.recNewName
+	    	}
+	    	$.ajax({
+				type: "POST",
+			    url: "/sys/hluser/modifyRecUser",
+                contentType: "application/json",
+			    data: JSON.stringify(vm.hlUser),
+			    success: function(r){
+			    	if(r.code === 0){
+						alert('操作成功', function(index){
+							$('#myModal').modal('hide');
+							vm.reload();
+						});
+					}else{
+						alert(r.msg);
+					}
+				}
+			});
 		},
 		saveOrUpdate: function (event) {
 			var url = vm.hlUser.id == null ? "/sys/hluser/save" : "/sys/hluser/update";

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.suke.czx.modules.hladmin.dao.HlAnnocementDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.suke.czx.modules.hladmin.entity.HlAnnocementEntity" id="hlAnnocementMap">
+        <result property="id" column="id"/>
+        <result property="content" column="content"/>
+        <result property="operatorName" column="operator_name"/>
+        <result property="operatorDate" column="operator_date"/>
+    </resultMap>
+	
+	<select id="selectLastAnnocement" resultType="java.lang.String">
+		SELECT content FROM hl_annocement ha WHERE ha.id = (SELECT MAX(id) FROM hl_annocement ha1)
+	</select>
+
+	<select id="queryObject" resultType="com.suke.czx.modules.hladmin.entity.HlAnnocementEntity">
+		select * from hl_annocement where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.suke.czx.modules.hladmin.entity.HlAnnocementEntity">
+		select * from hl_annocement
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from hl_annocement 
+	</select>
+	 
+	<insert id="save" parameterType="com.suke.czx.modules.hladmin.entity.HlAnnocementEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into hl_annocement
+		(
+			`content`, 
+			`operator_name`, 
+			`operator_date`
+		)
+		values
+		(
+			#{content}, 
+			#{operatorName}, 
+			#{operatorDate}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.suke.czx.modules.hladmin.entity.HlAnnocementEntity">
+		update hl_annocement 
+		<set>
+			<if test="content != null">`content` = #{content}, </if>
+			<if test="operatorName != null">`operator_name` = #{operatorName}, </if>
+			<if test="operatorDate != null">`operator_date` = #{operatorDate}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from hl_annocement where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from hl_annocement where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

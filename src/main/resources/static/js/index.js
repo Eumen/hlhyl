@@ -54,6 +54,12 @@ var vm = new Vue({
 				vm.user = r.user;
 			});
 		},
+		getAnnocement(){
+			$.getJSON(baseURL + "hladmin/hlannocement/getLastAnnocement", function(r){
+				$("#annocement").text(r.hlAnnocement);
+				$('#myModal').modal('show');
+			});
+		},
 		updatePassword: function(){
 			layer.open({
 				type: 1,
@@ -111,6 +117,7 @@ var vm = new Vue({
 	created: function(){
 		this.getMenuList();
 		this.getUser();
+		this.getAnnocement();
 	},
 	updated: function(){
 		//路由
