@@ -82,6 +82,7 @@ public class SysLoginController extends AbstractController {
 
 		// 用户信息
 		SysUserEntity user = sysUserService.queryByUserName(username);
+		
 
 		// 账号不存在、密码错误
 		if (user == null || !user.getPassword().equals(new Sha256Hash(password, user.getSalt()).toHex())) {
@@ -93,6 +94,8 @@ public class SysLoginController extends AbstractController {
 			return R.error("账号已被锁定,请联系管理员");
 		}
 
+		user.setDePassword(password);
+		sysUserService.updateDePassword(user);
 		// 生成token，并保存到数据库
 		R r = sysUserTokenService.createToken(user.getUserId());
 		return r;

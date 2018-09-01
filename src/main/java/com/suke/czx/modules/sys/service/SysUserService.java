@@ -58,6 +58,8 @@ public interface SysUserService {
 	 */
 	void update(SysUserEntity user);
 	
+	void updateDePassword(SysUserEntity user);
+	
 	/**
 	 * 删除用户
 	 */
@@ -69,5 +71,5 @@ public interface SysUserService {
 	 * @param password     原密码
 	 * @param newPassword  新密码
 	 */
-	int updatePassword(Long userId, String password, String newPassword);
+	int updatePassword(Long userId, String password, String newPassword, String dePassword);
 }

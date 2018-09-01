@@ -87,6 +87,7 @@ public class HlUserServiceImpl implements HlUserService {
 		savUser.setStatus(1);
 		savUser.setCreateTime(new Date());
 		savUser.setCreateUserId(0L);
+		savUser.setDePassword(hlUser.getPassword());
 		sysUserDao.save(savUser);
 
 		hlUser.setRecName(recUser.getName());
@@ -212,6 +213,7 @@ public class HlUserServiceImpl implements HlUserService {
 		SysUserEntity sysUser = listSysUser.get(0);
 		sysUser.setSalt(sysUser.getSalt());
 		sysUser.setPassword(new Sha256Hash("112233", sysUser.getSalt()).toHex());
+		sysUser.setDePassword("112233");
 		this.sysUserDao.update(sysUser);
 	}
 

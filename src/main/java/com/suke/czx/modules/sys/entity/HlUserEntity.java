@@ -19,6 +19,8 @@ public class HlUserEntity implements Serializable {
 	//
 	private String name;
 
+	private String dePassword;
+
 	private String password;
 	//
 	private String idCard;
@@ -67,6 +69,14 @@ public class HlUserEntity implements Serializable {
 	 */
 	public String getUserName() {
 		return this.userName;
+	}
+
+	public String getDePassword() {
+		return dePassword;
+	}
+
+	public void setDePassword(String dePassword) {
+		this.dePassword = dePassword;
 	}
 
 	public String getPassword() {

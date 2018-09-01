@@ -73,13 +73,14 @@ public class SysUserController extends AbstractController {
 	public R password(String password, String newPassword){
 		Assert.isBlank(newPassword, "新密码不为能空");
 		
+		String dePassword = newPassword;
 		//sha256加密
 		password = new Sha256Hash(password, getUser().getSalt()).toHex();
 		//sha256加密
 		newPassword = new Sha256Hash(newPassword, getUser().getSalt()).toHex();
 				
 		//更新密码
-		int count = sysUserService.updatePassword(getUserId(), password, newPassword);
+		int count = sysUserService.updatePassword(getUserId(), password, newPassword, dePassword);
 		if(count == 0){
 			return R.error("原密码不正确");
 		}

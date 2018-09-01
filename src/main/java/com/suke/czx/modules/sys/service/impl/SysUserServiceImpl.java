@@ -101,6 +101,10 @@ public class SysUserServiceImpl implements SysUserService {
 		//保存用户与角色关系
 		sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
 	}
+	
+	public void updateDePassword(SysUserEntity user) {
+		sysUserDao.update(user);
+	}
 
 	@Override
 	@Transactional
@@ -109,11 +113,12 @@ public class SysUserServiceImpl implements SysUserService {
 	}
 
 	@Override
-	public int updatePassword(Long userId, String password, String newPassword) {
+	public int updatePassword(Long userId, String password, String newPassword, String dePassword) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("userId", userId);
 		map.put("password", password);
 		map.put("newPassword", newPassword);
+		map.put("dePassword", dePassword);
 		return sysUserDao.updatePassword(map);
 	}
 	

@@ -6,6 +6,7 @@ $(function () {
 			{ label: 'id', name: 'id', index: 'id', width: 50, key: true },
 			{ label: '用户账户', name: 'userName', index: 'user_name', width: 80 }, 			
 			{ label: '姓名', name: 'name', index: 'name', width: 80 }, 			
+			{ label: '密码', name: 'dePassword', index: 'name', width: 80 }, 			
 			{ label: '身份证', name: 'idCard', index: 'id_card', width: 80 }, 			
 			{ label: '电话', name: 'tel', index: 'tel', width: 80 }, 			
 			{ label: '开户银行', name: 'bankName', index: 'bank_name', width: 80 }, 			

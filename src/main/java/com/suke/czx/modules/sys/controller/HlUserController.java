@@ -24,7 +24,6 @@ import com.suke.czx.common.utils.Query;
 import com.suke.czx.common.utils.R;
 import com.suke.czx.modules.hladmin.entity.HlRewardEntity;
 import com.suke.czx.modules.hladmin.service.HlHylPriceService;
-import com.suke.czx.modules.hladmin.service.HlRecuserHistoryService;
 import com.suke.czx.modules.hladmin.service.HlRewardService;
 import com.suke.czx.modules.sys.entity.HlModifyRecUserEntity;
 import com.suke.czx.modules.sys.entity.HlUserEntity;
@@ -209,7 +208,7 @@ public class HlUserController extends AbstractController {
 		response.setContentType("application/msexcel");
 		response.addHeader("Cache-Control", "no-cache");
 
-		String[] headers = new String[] { "编号", "用户名", "姓名", "", "身份证", "电话", "开户银行", "银行卡号", "流通货币数量", "锁仓数量", "推荐人账号",
+		String[] headers = new String[] { "编号", "用户名", "姓名", "密码", "", "身份证", "电话", "开户银行", "银行卡号", "流通货币数量", "锁仓数量", "推荐人账号",
 				"推荐人姓名", "注册日期", "注释" };
 		try {
 			OutputStream out = response.getOutputStream();
