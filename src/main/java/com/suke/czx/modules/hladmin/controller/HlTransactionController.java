@@ -108,10 +108,12 @@ public class HlTransactionController extends AbstractController {
 			return R.error("转账金额不允许大于流通持仓金额 10%");
 		}
 
-		// 七天之内只允许提现一次
-		int weekCount = this.hlTransactionService.querySumWeekByUserName(user.getUsername());
-		if (weekCount > 0) {
-			return R.error("对公账户一周只允许一次");
+		// 七天之内对公账户只允许提现一次
+		if(hlTransaction.getType() == 2){
+			int weekCount = this.hlTransactionService.querySumWeekByUserName(user.getUsername());
+			if (weekCount > 0) {
+				return R.error("对公账户一周只允许一次");
+			}
 		}
 
 		hlTransactionService.save(hlTransaction);
