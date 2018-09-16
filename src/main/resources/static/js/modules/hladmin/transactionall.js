@@ -12,6 +12,7 @@ $(function () {
 			{ label: '交易数量', name: 'amount', index: 'amount', width: 80 }, 			
 			{ label: '实际到账数量（对公账户收取手续费）', name: 'realAmount', index: 'real_amount', width: 80 }, 			
 			{ label: '交易日期', name: 'tranDate', index: 'tran_date', width: 80 }, 			
+			{ label: '货币价格', name: 'price', index: 'price', width: 80 }, 			
 			{ label: '备注', name: 'comment', index: 'comment', width: 80 }			
         ],
 		viewrecords: true,

@@ -14,6 +14,7 @@
         <result property="amount" column="amount"/>
         <result property="realAmount" column="real_amount"/>
         <result property="tranDate" column="tran_date"/>
+        <result property="price" column="price"/>
         <result property="comment" column="comment"/>
     </resultMap>
 
@@ -62,6 +63,7 @@
 			`amount`, 
 			`real_amount`, 
 			`tran_date`, 
+			`price`, 
 			`comment`
 		)
 		values
@@ -74,6 +76,7 @@
 			#{amount}, 
 			#{realAmount}, 
 			#{tranDate}, 
+			#{price}, 
 			#{comment}
 		)
 	</insert>

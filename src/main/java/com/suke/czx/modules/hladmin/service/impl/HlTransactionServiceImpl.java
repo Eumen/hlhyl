@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.suke.czx.modules.hladmin.dao.HlHylPriceDao;
 import com.suke.czx.modules.hladmin.dao.HlTransactionDao;
 import com.suke.czx.modules.hladmin.entity.HlTransactionEntity;
 import com.suke.czx.modules.hladmin.service.HlTransactionService;
@@ -21,6 +22,9 @@ public class HlTransactionServiceImpl implements HlTransactionService {
 	private HlTransactionDao hlTransactionDao;
 	@Autowired
 	private HlUserDao hlUserDao;
+
+	@Autowired
+	private HlHylPriceDao hlHylPriceDao;
 
 	@Override
 	public HlTransactionEntity queryObject(Integer id) {
@@ -63,6 +67,8 @@ public class HlTransactionServiceImpl implements HlTransactionService {
 		} else {
 			hlTransaction.setRealAmount(hlTransaction.getAmount());
 		}
+		final String price = hlHylPriceDao.queryMaxPrice();
+		hlTransaction.setPrice(price);
 		hlTransactionDao.save(hlTransaction);
 	}
 
