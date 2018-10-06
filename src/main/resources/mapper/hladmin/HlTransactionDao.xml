@@ -27,6 +27,7 @@
 		<where>
         	<if test="userName != null">
 				and `user_name` = #{userName} 
+				or `target_user_name` = #{userName} 
 			</if>
         </where>
         <choose>

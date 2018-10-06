@@ -94,11 +94,7 @@ public class HlRewardController extends AbstractController {
 
 	@RequestMapping("/generate")
 	public R generate() {
-		int count = hlRewardService.isGenerate(DateUtil.newIsoDateFormat().format(new Date()));
-		if (count > 0) {
-			return R.error("今天奖金已生成");
-		}
-		hlRewardService.generate();
+		hlRewardService.bufa();
 		return R.ok();
 	}
 

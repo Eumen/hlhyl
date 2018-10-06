@@ -8,7 +8,7 @@ $(function () {
 			{ label: '姓名', name: 'name', index: 'name', width: 80 }, 			
 			{ label: '金额', name: 'amount', index: 'amount', width: 80 }, 			
 			{ label: '日期', name: 'awardDate', index: 'award_date', width: 80 }, 			
-			{ label: '类型:1. 锁仓奖励2. 直推奖励', name: 'awardType', index: 'award_type', width: 80 }, 			
+			{ label: '类型:1.锁仓奖励2.直推奖励3.补发', name: 'awardType', index: 'award_type', width: 80 }, 			
 			{ label: '备注', name: 'comment', index: 'comment', width: 80 }			
         ],
 		viewrecords: true,

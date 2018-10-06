@@ -55,7 +55,7 @@ public class SysLoginController extends AbstractController {
 	public void captcha(HttpServletResponse response) throws ServletException, IOException {
 		response.setHeader("Cache-Control", "no-store, no-cache");
 		response.setContentType("image/jpeg");
-
+		response.addHeader("Access-Control-Allow-Origin", "*");
 		// 生成文字验证码
 		String text = producer.createText();
 		// 生成图片验证码

@@ -30,5 +30,7 @@ public interface HlRewardService {
 
 	void generate();
 	
+	void bufa();
+	
 	int isGenerate(String awardDate);
 }

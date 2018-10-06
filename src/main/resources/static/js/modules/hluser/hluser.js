@@ -3,8 +3,10 @@ $(function () {
 	function awardFmatter(cellvalue, options, rowObject){
 		if(1 == cellvalue){
 			return '锁仓奖励';
-		}else {
+		}else if(2 == cellvalue){
 			return '直推奖励';
+		}else {
+			return '补发利息';
 		}
 	}
 	function transactionFmatter(cellvalue, options, rowObject){

@@ -16,4 +16,7 @@ import com.suke.czx.modules.sys.entity.HlUserEntity;
 @Mapper
 public interface HlUserDao extends BaseDao<HlUserEntity> {
 	List<HlUserEntity> queryAll();
+	
+	int updateBatch(List<HlUserEntity> userList);
+	
 }

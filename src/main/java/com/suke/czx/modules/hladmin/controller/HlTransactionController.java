@@ -53,6 +53,7 @@ public class HlTransactionController extends AbstractController {
 		Query query = new Query(params);
 		if (!userName.contains("admin")) {
 			query.put("userName", userName);
+			query.put("targetUserName", userName);
 		}
 		
 		List<HlTransactionEntity> hlTransactionList = hlTransactionService.queryList(query);
