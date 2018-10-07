@@ -22,7 +22,9 @@ import com.suke.czx.common.utils.ExcelUtil;
 import com.suke.czx.common.utils.PageUtils;
 import com.suke.czx.common.utils.Query;
 import com.suke.czx.common.utils.R;
+import com.suke.czx.modules.hladmin.entity.CuxAdministrationRegionEntity;
 import com.suke.czx.modules.hladmin.entity.HlRewardEntity;
+import com.suke.czx.modules.hladmin.service.CuxAdministrationRegionService;
 import com.suke.czx.modules.hladmin.service.HlHylPriceService;
 import com.suke.czx.modules.hladmin.service.HlRewardService;
 import com.suke.czx.modules.sys.entity.HlModifyRecUserEntity;
@@ -45,6 +47,8 @@ public class HlUserController extends AbstractController {
 	private HlHylPriceService hlHylPriceService;
 	@Autowired
 	private HlRewardService hlRewardService;
+	@Autowired
+	private CuxAdministrationRegionService cuxAdministrationRegionService;
 
 	/**
 	 * 列表
@@ -73,6 +77,19 @@ public class HlUserController extends AbstractController {
 		}
 
 		return R.ok().put("hlUser", map);
+	}
+
+	@RequestMapping("/listRegion")
+	public R listRegion(@RequestParam Map<String, Object> params) {
+		List<CuxAdministrationRegionEntity> allRegion = cuxAdministrationRegionService.queryList(params);
+		CuxAdministrationRegionEntity root = new CuxAdministrationRegionEntity();
+		root.setId(0);
+		root.setRegionCode(0);
+		root.setName("全国");
+		root.setParentRegionCode(-1);
+		root.setRegionLevel(0);
+		allRegion.add(root);
+		return R.ok().put("allRegion", allRegion);
 	}
 
 	/**
@@ -208,8 +225,8 @@ public class HlUserController extends AbstractController {
 		response.setContentType("application/msexcel");
 		response.addHeader("Cache-Control", "no-cache");
 
-		String[] headers = new String[] { "编号", "用户名", "姓名", "密码", "", "身份证", "电话", "开户银行", "银行卡号", "流通货币数量", "锁仓数量", "推荐人账号",
-				"推荐人姓名", "注册日期", "注释" };
+		String[] headers = new String[] { "编号", "用户名", "姓名", "密码", "", "身份证", "电话", "开户银行", "银行卡号", "流通货币数量", "锁仓数量",
+				"推荐人账号", "推荐人姓名", "注册日期", "注释" };
 		try {
 			OutputStream out = response.getOutputStream();
 			ExcelUtil.exportExcel("用户购买货币信息", headers, dataset, out, "yyyy-MM-dd");

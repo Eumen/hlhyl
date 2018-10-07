@@ -39,6 +39,15 @@
 			<if test="name != null">
 				and h.name = #{name} 
 			</if>
+			<if test="regionCode != null and regionCode != 0">
+				and SUBSTR(h.id_card,1,6) = #{regionCode} 
+			</if>
+			<if test="startDate != null and startDate != ''">
+				and h.register_date &gt;= #{startDate} 
+			</if>
+			<if test="endDate != null and endDate != ''">
+				and h.register_date &lt;= #{endDate} 
+			</if>
 		</where>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
@@ -54,7 +63,33 @@
 	</select>
 	
  	<select id="queryTotal" resultType="int">
-		select count(*) from hl_user 
+		select count(*) from hl_user h, sys_user s
+		<where>
+			h.user_name = s.username
+			<if test="userName != null and userName.trim() != ''">
+				and h.user_name like concat('%',#{userName},'%') 
+			</if>
+			<if test="name != null">
+				and h.name = #{name} 
+			</if>
+			<if test="regionCode != null and regionCode != 0">
+				and SUBSTR(h.id_card,1,6) = #{regionCode} 
+			</if>
+			<if test="startDate != null and startDate != ''">
+				and h.register_date &gt;= #{startDate} 
+			</if>
+			<if test="endDate != null and endDate != ''">
+				and h.register_date &lt;= #{endDate} 
+			</if>
+		</where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
 	</select>
 	 
 	<insert id="save" parameterType="com.suke.czx.modules.sys.entity.HlUserEntity" useGeneratedKeys="true" keyProperty="id">

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.suke.czx.modules.hladmin.dao.CuxAdministrationRegionDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.suke.czx.modules.hladmin.entity.CuxAdministrationRegionEntity" id="cuxAdministrationRegionMap">
+        <result property="id" column="id"/>
+        <result property="regionCode" column="region_code"/>
+        <result property="name" column="name"/>
+        <result property="regionLevel" column="region_level"/>
+        <result property="parentRegionCode" column="parent_region_code"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.suke.czx.modules.hladmin.entity.CuxAdministrationRegionEntity">
+		select * from cux_administration_region where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.suke.czx.modules.hladmin.entity.CuxAdministrationRegionEntity">
+		select * from cux_administration_region
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cux_administration_region 
+	</select>
+	 
+	<insert id="save" parameterType="com.suke.czx.modules.hladmin.entity.CuxAdministrationRegionEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cux_administration_region
+		(
+			`region_code`, 
+			`name`, 
+			`region_level`, 
+			`parent_region_code`
+		)
+		values
+		(
+			#{regionCode}, 
+			#{name}, 
+			#{regionLevel}, 
+			#{parentRegionCode}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.suke.czx.modules.hladmin.entity.CuxAdministrationRegionEntity">
+		update cux_administration_region 
+		<set>
+			<if test="regionCode != null">`region_code` = #{regionCode}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="regionLevel != null">`region_level` = #{regionLevel}, </if>
+			<if test="parentRegionCode != null">`parent_region_code` = #{parentRegionCode}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cux_administration_region where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cux_administration_region where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -1,4 +1,26 @@
 $(function () {
+	
+	$(function () {
+	    var picker1 = $('#datetimepicker1').datetimepicker({
+	        format: 'YYYY-MM-DD',
+	        locale: moment.locale('zh-cn'),
+	        //minDate: '2016-7-1'
+	    });
+	    var picker2 = $('#datetimepicker2').datetimepicker({
+	        format: 'YYYY-MM-DD',
+	        locale: moment.locale('zh-cn')
+	    });
+	    //动态设置最小值
+//	    picker1.on('dp.change', function (e) {
+//	        picker2.data('DateTimePicker').minDate(e.date);
+//	    });
+//	    //动态设置最大值
+//	    picker2.on('dp.change', function (e) {
+//	        picker1.data('DateTimePicker').maxDate(e.date);
+//	    });
+	});
+
+	
     $("#jqGrid").jqGrid({
         url: '/sys/hluser/listAll',
         datatype: "json",
@@ -56,17 +78,68 @@ $(function () {
     });
     
 });
-
+//加载菜单树
+var setting = {
+	    data: {
+	        simpleData: {
+	            enable: true,
+	            idKey: "regionCode",
+	            pIdKey: "parentRegionCode",
+	            rootPId: -1,
+	        },
+	        key: {
+	            url:"nourl"
+	        }
+	    }
+	};
+var ztree;
 var vm = new Vue({
 	el:'#rrapp',
 	data:{
 		showList: true,
 		title: null,
-		hlUser: {userName:null},
+		hlUser: {
+			userName: null,
+			parentRegionCode:0,
+			regionCode: 0,
+			regionName: null,
+			startDate: null,
+			endDate: null
+		}
 	},
 	methods: {
 		query: function () {
 			vm.reload();
+		},
+		regionTree: function(){
+			$.get("/sys/hluser/listRegion", function(r){
+		        ztree = $.fn.zTree.init($("#regionTree"), setting, r.allRegion);
+		        var node = ztree.getNodeByParam("regionCode", vm.hlUser.regionCode);
+		        ztree.selectNode(node);
+
+		        vm.hlUser.regionName = node.regionName;
+		        vm.hlUser.regionCode = node.regionCode;
+				layer.open({
+	                type: 1,
+	                offset: '50px',
+	                skin: 'layui-layer-molv',
+	                title: "选择行政区划",
+	                area: ['300px', '450px'],
+	                shade: 0,
+	                shadeClose: false,
+	                content: jQuery("#regionLayer"),
+	                btn: ['确定', '取消'],
+	                btn1: function (index) {
+	                	debugger
+	                    var node = ztree.getSelectedNodes();
+	                    //选择上级菜单
+	                    vm.hlUser.regionName = node[0].name;
+	                    vm.hlUser.regionCode = node[0].regionCode;
+	
+	                    layer.close(index);
+	                }
+	            });
+		    });
 		},
 		add: function(){
 			vm.showList = false;
@@ -179,7 +252,12 @@ var vm = new Vue({
 			vm.showList = true;
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
 			$("#jqGrid").jqGrid('setGridParam',{ 
-				postData:{'userName': vm.hlUser.userName},
+				postData:{
+					'userName': vm.hlUser.userName,
+					'regionCode': vm.hlUser.regionCode,
+					'startDate': $("#startDate").val(),
+					'endDate': $("#endDate").val()
+				},
                 page:page
             }).trigger("reloadGrid");
 		}
