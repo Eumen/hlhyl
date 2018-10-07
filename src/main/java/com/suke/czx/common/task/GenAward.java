@@ -15,7 +15,7 @@ public class GenAward {
 	@Autowired
 	HlRewardService hlRewardService;
 
-	@Scheduled(cron = "0 0 18 * * ?")
+	@Scheduled(cron = "0 0 9 ? * MON-FRI")
 	public void generateAward() {
 		int count = hlRewardService.isGenerate(DateUtil.newIsoDateFormat().format(new Date()));
 		if (count == 0) {
